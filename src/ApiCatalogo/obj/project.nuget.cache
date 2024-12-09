@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "9dsUSHbRXzs=",
+  "success": true,
+  "projectFilePath": "/Users/fabiovilalba/Documents/ApiCatalogo/src/ApiCatalogo/ApiCatalogo.csproj",
+  "expectedPackageFiles": [
+    "/Users/fabiovilalba/.nuget/packages/microsoft.aspnetcore.openapi/9.0.0/microsoft.aspnetcore.openapi.9.0.0.nupkg.sha512",
+    "/Users/fabiovilalba/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512",
+    "/Users/fabiovilalba/.nuget/packages/swashbuckle.aspnetcore.swaggerui/7.1.0/swashbuckle.aspnetcore.swaggerui.7.1.0.nupkg.sha512"
+  ],
+  "logs": []
+}
