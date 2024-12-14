@@ -1,0 +1,25 @@
+version: '1.0'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: MySQL_CatalogoDB
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: alfacinho
+      MYSQL_DATABASE: CatalogoDB
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+
+
+# Tive este problema aqui para conectar o dbeaver com o mysql docker
+# Public Key Retrieval is not allowed
+
+# resolvi assim no terminal
+# >docker exec -it MySQL_CatalogoDB mysql -uroot -p
+# >ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'alfacinho';
