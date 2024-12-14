@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "UyOHxD4BWNQ=",
+  "dgSpecHash": "VP8lgeX0aV8=",
   "success": true,
   "projectFilePath": "/Users/fabiovilalba/Documents/ApiCatalogo/src/ApiCatalogo/ApiCatalogo.csproj",
   "expectedPackageFiles": [
@@ -33,8 +33,8 @@
     "/Users/fabiovilalba/.nuget/packages/microsoft.extensions.primitives/9.0.0/microsoft.extensions.primitives.9.0.0.nupkg.sha512",
     "/Users/fabiovilalba/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512",
     "/Users/fabiovilalba/.nuget/packages/mono.texttemplating/3.0.0/mono.texttemplating.3.0.0.nupkg.sha512",
-    "/Users/fabiovilalba/.nuget/packages/mysqlconnector/2.3.5/mysqlconnector.2.3.5.nupkg.sha512",
-    "/Users/fabiovilalba/.nuget/packages/pomelo.entityframeworkcore.mysql/8.0.2/pomelo.entityframeworkcore.mysql.8.0.2.nupkg.sha512",
+    "/Users/fabiovilalba/.nuget/packages/mysqlconnector/2.4.0/mysqlconnector.2.4.0.nupkg.sha512",
+    "/Users/fabiovilalba/.nuget/packages/pomelo.entityframeworkcore.mysql/9.0.0-preview.2.efcore.9.0.0/pomelo.entityframeworkcore.mysql.9.0.0-preview.2.efcore.9.0.0.nupkg.sha512",
     "/Users/fabiovilalba/.nuget/packages/swashbuckle.aspnetcore.swaggerui/7.1.0/swashbuckle.aspnetcore.swaggerui.7.1.0.nupkg.sha512",
     "/Users/fabiovilalba/.nuget/packages/system.codedom/6.0.0/system.codedom.6.0.0.nupkg.sha512",
     "/Users/fabiovilalba/.nuget/packages/system.collections.immutable/7.0.0/system.collections.immutable.7.0.0.nupkg.sha512",
@@ -50,16 +50,5 @@
     "/Users/fabiovilalba/.nuget/packages/system.text.json/9.0.0/system.text.json.9.0.0.nupkg.sha512",
     "/Users/fabiovilalba/.nuget/packages/system.threading.channels/7.0.0/system.threading.channels.7.0.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1608",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Detected package version outside of dependency constraint: Pomelo.EntityFrameworkCore.MySql 8.0.2 requires Microsoft.EntityFrameworkCore.Relational (>= 8.0.2 && <= 8.0.999) but version Microsoft.EntityFrameworkCore.Relational 9.0.0 was resolved.",
-      "libraryId": "Microsoft.EntityFrameworkCore.Relational",
-      "targetGraphs": [
-        "net9.0"
-      ]
-    }
-  ]
+  "logs": []
 }
