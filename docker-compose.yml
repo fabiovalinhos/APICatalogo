@@ -23,3 +23,5 @@ volumes:
 # resolvi assim no terminal
 # >docker exec -it MySQL_CatalogoDB mysql -uroot -p
 # >ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'alfacinho';
+
+# Existem outras maneiras, como configurar a chave pública da conecção do banco no dbeaver
