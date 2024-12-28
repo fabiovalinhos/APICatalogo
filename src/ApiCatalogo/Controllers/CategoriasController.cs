@@ -16,7 +16,7 @@ namespace ApiCatalogo.Controllers
             _context = context;
         }
 
-        [HttpGet ("produtos")]
+        [HttpGet("produtos")]
         public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
         {
             return _context.Categorias.Include(p => p.Produtos).ToList();
@@ -25,18 +25,34 @@ namespace ApiCatalogo.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
-            return _context.Categorias.AsNoTracking().ToList();
+            try
+            {
+                return _context.Categorias.AsNoTracking().ToList();
+            }
+            catch (System.Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                "Ocorreu um problema ao tratar a solicitação");
+            }
         }
 
         [HttpGet("{id:int}", Name = "ObterCategoria")]
         public ActionResult<Categoria> Get(int id)
         {
-            var categoria = _context.Categorias.FirstOrDefault(p => p.CategoriaId == id);
+            try
+            {
+                var categoria = _context.Categorias.FirstOrDefault(p => p.CategoriaId == id);
 
-            if (categoria is null)
-                return NotFound("Categoria não encontrada...");
+                if (categoria is null)
+                    return NotFound("Categoria não encontrada...");
 
-            return Ok(categoria);
+                return Ok(categoria);
+            }
+            catch (System.Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                "Ocorreu um problema ao tratar a solicitação");
+            }
         }
 
 
@@ -71,7 +87,7 @@ namespace ApiCatalogo.Controllers
             var categoria = _context.Categorias.FirstOrDefault(p => p.CategoriaId == id);
 
             if (categoria is null)
-                return NotFound("Categoria não encontrada ...");
+                return NotFound($"Categoria id = {id} não encontrada ...");
 
             _context.Remove(categoria);
             _context.SaveChanges();
