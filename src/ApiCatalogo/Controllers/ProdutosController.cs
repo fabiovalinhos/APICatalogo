@@ -17,9 +17,9 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Produto>> Get()
+    public async Task< ActionResult<IEnumerable<Produto>>> Get2()
     {
-        var produtos = _context.Produtos?.AsNoTracking().ToList();
+        var produtos = await _context.Produtos?.AsNoTracking().ToListAsync();
 
         if (produtos is null)
         {
@@ -29,24 +29,31 @@ public class ProdutosController : ControllerBase
         return produtos;
     }
 
-    [HttpGet("id:int", Name = "ObterProduto")]
-    public ActionResult<Produto> Get(int id)
+    [HttpGet("id:int:min(1)", Name = "ObterProduto")]
+    public async Task< ActionResult<Produto>> Get(int id)
     {
-        var produto = _context.Produtos?.FirstOrDefault(p => p.ProdutoId == id);
+        var produto = await _context.Produtos?
+        .AsNoTracking()
+        .FirstOrDefaultAsync(p => p.ProdutoId == id);
 
         if (produto is null)
         {
             return NotFound("Produto não encontrado");
         }
 
-        return produto;
+        return Ok(produto);
     }
 
     [HttpPost]
-    public ActionResult Post(Produto produto)
+    public ActionResult Post([FromBody] Produto produto)
     {
         if (produto is null)
             return BadRequest();
+
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
         _context.Produtos.Add(produto);
         _context.SaveChanges();
