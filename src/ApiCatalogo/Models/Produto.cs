@@ -38,6 +38,8 @@ public class Produto : IValidatableObject
     [JsonIgnore]
     public Categoria? Categoria { get; set; }
 
+
+    //Segunda maneira de abordar e criar uma validação
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (!string.IsNullOrEmpty(this.Nome))

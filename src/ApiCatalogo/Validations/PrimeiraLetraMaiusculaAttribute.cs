@@ -4,6 +4,8 @@ namespace ApiCatalogo.Validations
 {
     public class PrimeiraLetraMaiusculaAttribute : ValidationAttribute
     {
+
+        //Primeira maneira de abordar e criar uma validação
         protected override ValidationResult? IsValid(object? value,
             ValidationContext validationContext)
         {
@@ -11,7 +13,7 @@ namespace ApiCatalogo.Validations
             {
                 return ValidationResult.Success;
             }
-
+            
             var primeiraLetra = value.ToString()[0].ToString();
             if (primeiraLetra != primeiraLetra.ToUpper())
             {
