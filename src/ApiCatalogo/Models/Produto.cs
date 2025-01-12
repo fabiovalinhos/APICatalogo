@@ -39,7 +39,11 @@ public class Produto : IValidatableObject
     public Categoria? Categoria { get; set; }
 
 
-    //Segunda maneira de abordar e criar uma validação
+// Obs: primeiro ele lança os erros das validações das tags acima.
+// Depois ele faz a validação do método abaixo. Ele não mostra as duas
+// validações ao mesmo tempo
+
+    // Segunda maneira de abordar e criar uma validação
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (!string.IsNullOrEmpty(this.Nome))
@@ -49,17 +53,15 @@ public class Produto : IValidatableObject
             {
                 yield return new
                     ValidationResult("A primeira letra do produto deve ser maiúscula",
-                    new[]
-                    { nameof(this.Nome)});
+                    [nameof(this.Nome)]);
             }
+        }
 
-            if (this.Estoque <= 0)
-            {
-                yield return new ValidationResult
-                    ("O estoque deve ser maior que zero",
-                    new[]
-                    { nameof(this.Estoque)});
-            }
+        if (this.Estoque <= 0)
+        {
+            yield return new ValidationResult
+                ("O estoque deve ser maior que zero",
+                [nameof(this.Estoque)]);
         }
     }
 }

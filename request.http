@@ -5,11 +5,11 @@ POST https://localhost:7072/produtos HTTP/1.1
 content-type: application/json
 
 {
-    "nome": "Guaraná em pó",
-    "descricao": "Refrigerante de Cola 350 ml quauauauau",
-    "preco": 0,
+    "nome": "Guaraná pó",
+    "descricao": "Refresco",
+    "preco": 5,
     "imageUrl": "cocacola.jpg",
-    "estoque": 50,
+    "estoque": 12,
     "dataCadastro": "2024-12-18T23:10:48",
     "categoriaId": 1
   }
