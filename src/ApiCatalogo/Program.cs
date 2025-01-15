@@ -31,9 +31,28 @@ c.SwaggerEndpoint("/openapi/v1.json", "Weather Api"));
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.Use(async (context, next) =>
+{
+    // adiciona o código antes do request
+    await next(context);
+    // adiciona o código depois do request
+}
+);
+
+
+
 
 app.MapControllers();
 
+
+app.Run(async (context) =>
+{
+    await context.Response.WriteAsync("Middleware final");
+}
+);
+
 app.Run();
+
