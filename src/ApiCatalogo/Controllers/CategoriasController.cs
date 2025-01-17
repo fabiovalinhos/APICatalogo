@@ -39,6 +39,13 @@ namespace ApiCatalogo.Controllers
         [HttpGet("{id:int}", Name = "ObterCategoria")]
         public ActionResult<Categoria> Get(int id)
         {
+
+            // teste de excessões
+            // throw new Exception("Exceção ao retornar o produto pelo ID");
+
+            // string [] teste = null;
+            // if (teste.Length >0 ){}
+
             try
             {
                 var categoria = _context.Categorias.FirstOrDefault(p => p.CategoriaId == id);

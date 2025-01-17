@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using ApiCatalogo.Context;
+using ApiCatalogo.Extentions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +28,9 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwaggerUI(c =>
-c.SwaggerEndpoint("/openapi/v1.json", "Weather Api"));
+        c.SwaggerEndpoint("/openapi/v1.json", "Weather Api"));
+
+    app.ConfigureExceptionHandler();
 }
 
 app.UseHttpsRedirection();
@@ -36,23 +39,12 @@ app.UseAuthorization();
 
 app.Use(async (context, next) =>
 {
-    // adiciona o código antes do request
+    // adiciona o cÃ³digo antes do request
     await next(context);
-    // adiciona o código depois do request
+    // adiciona o cÃ³digo depois do request
 }
 );
-
-
-
 
 app.MapControllers();
-
-
-app.Run(async (context) =>
-{
-    await context.Response.WriteAsync("Middleware final");
-}
-);
-
 app.Run();
 
