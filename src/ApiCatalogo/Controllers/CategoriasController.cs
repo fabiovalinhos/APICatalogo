@@ -11,15 +11,19 @@ namespace ApiCatalogo.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly ILogger _logger;
 
-        public CategoriasController(AppDbContext context)
+        public CategoriasController(AppDbContext context, ILogger<CategoriasController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet("produtos")]
         public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
         {
+            _logger.LogInformation("========= GET categorias/produtos ==========");
+
             return _context.Categorias.Include(p => p.Produtos).ToList();
         }
 
@@ -41,12 +45,13 @@ namespace ApiCatalogo.Controllers
         [HttpGet("{id:int}", Name = "ObterCategoria")]
         public ActionResult<Categoria> Get(int id)
         {
-
             // teste de excessões
             // throw new Exception("Exceção ao retornar o produto pelo ID");
 
             // string [] teste = null;
             // if (teste.Length >0 ){}
+
+            _logger.LogInformation($"========= GET categorias/id = {id} ==========");
 
             try
             {

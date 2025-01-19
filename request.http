@@ -4,7 +4,10 @@ GET https://localhost:7072/produtos HTTP/1.1
 GET https://localhost:7072/categorias HTTP/1.1
 
 ###
-GET https://localhost:7072/categorias/1 HTTP/1.1
+GET https://localhost:7072/categorias/produtos HTTP/1.1
+
+###
+GET https://localhost:7072/categorias/2 HTTP/1.1
 
 ###
 POST https://localhost:7072/produtos HTTP/1.1
