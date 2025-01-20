@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using ApiCatalogo.Context;
 using ApiCatalogo.Extentions;
 using ApiCatalogo.Filters;
+using ApiCatalogo.Logging;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
 
 builder.Services.AddScoped<ApiLoggingFilter>();
+
+
+builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggingProviderConfiguration
+{
+    LogLevel = LogLevel.Information
+}));
 
 var app = builder.Build();
 
