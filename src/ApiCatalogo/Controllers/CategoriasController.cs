@@ -19,6 +19,9 @@ namespace ApiCatalogo.Controllers
             _logger = logger;
         }
 
+        //No controlador não tenho mais um try catch pois eu tenho um filtro global para pegar
+        //    Exceptions (ApiExceptionFilter)
+
         [HttpGet("produtos")]
         public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
         {
@@ -31,15 +34,7 @@ namespace ApiCatalogo.Controllers
         [ServiceFilter(typeof(ApiLoggingFilter))]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
-            try
-            {
-                return _context.Categorias.AsNoTracking().ToList();
-            }
-            catch (System.Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                "Ocorreu um problema ao tratar a solicitação");
-            }
+            return _context.Categorias.AsNoTracking().ToList();
         }
 
         [HttpGet("{id:int}", Name = "ObterCategoria")]
@@ -53,20 +48,12 @@ namespace ApiCatalogo.Controllers
 
             _logger.LogInformation($"========= GET categorias/id = {id} ==========");
 
-            try
-            {
-                var categoria = _context.Categorias.FirstOrDefault(p => p.CategoriaId == id);
+            var categoria = _context.Categorias.FirstOrDefault(p => p.CategoriaId == id);
 
-                if (categoria is null)
-                    return NotFound("Categoria não encontrada...");
+            if (categoria is null)
+                return NotFound("Categoria não encontrada...");
 
-                return Ok(categoria);
-            }
-            catch (System.Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                "Ocorreu um problema ao tratar a solicitação");
-            }
+            return Ok(categoria);
         }
 
 
