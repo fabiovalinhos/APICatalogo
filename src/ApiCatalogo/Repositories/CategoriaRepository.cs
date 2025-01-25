@@ -13,11 +13,9 @@ namespace ApiCatalogo.Repositories
             _context = context;
         }
 
-        public IEnumerable<Categoria> GetCategoria()
+        public IEnumerable<Categoria> GetCategorias()
         {
             return _context.Categorias.ToList();
-
-            //Não estamos usando conferência ou try catch pois temos
             //    filtro global para excessões
         }
 
