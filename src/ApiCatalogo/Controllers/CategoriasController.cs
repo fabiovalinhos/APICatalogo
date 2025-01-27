@@ -56,7 +56,7 @@ namespace ApiCatalogo.Controllers
             if (categoria is null)
             {
                 _logger.LogWarning($"Categoria com id = {id} não foi encontrado");
-                return NotFound("Categoria não encontrada...");
+                return NotFound($"Categoria id = {id} não encontrada...");
             }
 
             return Ok(categoria);

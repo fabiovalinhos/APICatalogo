@@ -17,7 +17,8 @@ namespace ApiCatalogo.Filters
         {
             _logger.LogError(context.Exception, "Ocorreu uma exceção não tratada: Status Code 500");
             
-            context.Result = new ObjectResult("Ocorreu um problema ao tratar a solicitação:  Status Code 500")
+            context.Result = 
+            new ObjectResult($"Ocorreu um problema ao tratar a solicitação: \n{context.Exception.Message} \nStatus Code: 500")
             {
                 StatusCode = StatusCodes.Status500InternalServerError
             };
