@@ -11,7 +11,7 @@ namespace ApiCatalogo.Controllers
     [Route("[controller]")]
     public class CategoriasController : ControllerBase
     {
-        private readonly ICategoriaRepository _repository;
+        private readonly IRepository<Categoria> _repository;
         private readonly ILogger _logger;
 
         public CategoriasController(ICategoriaRepository repository, ILogger<CategoriasController> logger)
@@ -23,19 +23,11 @@ namespace ApiCatalogo.Controllers
         //No controlador não tenho mais um try catch pois eu tenho um filtro global para pegar
         //    Exceptions (ApiExceptionFilter)
 
-        // [HttpGet("produtos")]
-        // public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
-        // {
-        //     _logger.LogInformation("========= GET categorias/produtos ==========");
-
-        //     return _context.Categorias.Include(p => p.Produtos).ToList();
-        // }
-
         [HttpGet]
         [ServiceFilter(typeof(ApiLoggingFilter))]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
-            var categorias = _repository.GetCategorias();
+            var categorias = _repository.GetAll();
 
             return Ok(categorias);
         }
@@ -51,7 +43,7 @@ namespace ApiCatalogo.Controllers
 
             _logger.LogInformation($"========= GET categorias/id = {id} ==========");
 
-            var categoria = _repository.GetCategoria(id);
+            var categoria = _repository.Get(c => c.CategoriaId == id);
 
             if (categoria is null)
             {
@@ -91,13 +83,13 @@ namespace ApiCatalogo.Controllers
         [HttpDelete("{id:int}")]
         public ActionResult<Categoria> Delete(int id)
         {
-            var categoria = _repository.GetCategoria(id);
+            var categoria = _repository.Get(c => c.CategoriaId == id);
 
             if (categoria is null)
                 return NotFound($"Categoria id = {id} não encontrada ...");
 
 
-            var categoriaExcluida = _repository.Delete(id);
+            var categoriaExcluida = _repository.Delete(categoria);
             return Ok(categoriaExcluida);
         }
     }

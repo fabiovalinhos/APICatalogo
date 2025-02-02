@@ -5,7 +5,7 @@ namespace ApiCatalogo.Repositories
 {
     public class ProdutoRepository : Repository<Produto>, IProdutoRepository
     {
-        public ProdutoRepository(AppDbContext context): base(context)
+        public ProdutoRepository(AppDbContext context) : base(context)
         {
         }
 
