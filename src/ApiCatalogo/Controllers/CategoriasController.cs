@@ -1,9 +1,7 @@
-using ApiCatalogo.Context;
 using ApiCatalogo.Filters;
 using ApiCatalogo.Models;
 using ApiCatalogo.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ApiCatalogo.Controllers
 {
@@ -73,7 +71,7 @@ namespace ApiCatalogo.Controllers
             if (id != categoria.CategoriaId)
             {
                 _logger.LogWarning("Dados inválidos ...");
-                return BadRequest();
+                return BadRequest("Invalido ...");
             }
 
             _repository.Update(categoria);
