@@ -15,10 +15,6 @@ public class ProdutosController : ControllerBase
         _uof = uof;
     }
 
-    public ProdutosController()
-    {
-    }
-
     [HttpGet("produtos/{id}")]
     public ActionResult<IEnumerable<Produto>> GetProdutosPorCategoria(int id)
     {
