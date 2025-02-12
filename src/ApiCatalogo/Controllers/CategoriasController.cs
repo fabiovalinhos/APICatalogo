@@ -1,6 +1,5 @@
 using ApiCatalogo.DTOs;
 using ApiCatalogo.Filters;
-using ApiCatalogo.Models;
 using ApiCatalogo.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,14 +27,13 @@ namespace ApiCatalogo.Controllers
         {
             var categorias = _uof.CategoriaRepository.GetAll();
 
-            var listaCategoriasDTO = new List<CategoriaDTO>();
-
-            foreach (var item in categorias)
-            {
-                listaCategoriasDTO.Add(item.ParaDTO());
+            if(categorias is null ){
+                return NotFound("Categorias nao encontradas ... ");
             }
 
-            return Ok(listaCategoriasDTO);
+
+
+            return Ok(categorias.ParaDTOLista());
         }
 
         [HttpGet("{id:int}", Name = "ObterCategoria")]
@@ -83,13 +81,13 @@ namespace ApiCatalogo.Controllers
         [HttpPut]
         public ActionResult<CategoriaDTO> Put(int id, CategoriaDTO categoriaDTO)
         {
-            var categoria = categoriaDTO.ParaCategoria();
-
-            if (id != categoria.CategoriaId)
+            if (id != categoriaDTO.CategoriaId)
             {
                 _logger.LogWarning("Dados inválidos ...");
                 return BadRequest("Invalido ...");
             }
+
+            var categoria = categoriaDTO.ParaCategoria();
 
             var categoriaAtualizada = _uof.CategoriaRepository.Update(categoria);
             _uof.Commit();
