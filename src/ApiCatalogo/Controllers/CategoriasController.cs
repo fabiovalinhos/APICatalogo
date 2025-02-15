@@ -31,8 +31,6 @@ namespace ApiCatalogo.Controllers
                 return NotFound("Categorias nao encontradas ... ");
             }
 
-
-
             return Ok(categorias.ParaDTOLista());
         }
 
