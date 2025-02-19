@@ -74,6 +74,7 @@ public class ProdutosController : ControllerBase
             "ObterProduto", new { id = novoProdutoDTO.ProdutoId }, novoProdutoDTO);
     }
 
+
     [HttpPatch("{id}/UpdatePartial")]
     public ActionResult<ProdutoDTOUpdateResponse> Patch(int id,
         JsonPatchDocument<ProdutoDTOUpdateRequest> patchProdutoDTO)
@@ -113,6 +114,7 @@ public class ProdutosController : ControllerBase
 
         return Ok(produtoAtualizado.ParaProdutoDTO());
     }
+
 
     [HttpDelete("{id:int}")]
     public ActionResult<ProdutoDTO> Delete(int id)
