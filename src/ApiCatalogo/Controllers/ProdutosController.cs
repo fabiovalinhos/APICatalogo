@@ -1,5 +1,6 @@
 using ApiCatalogo.DTOs;
 using ApiCatalogo.Models;
+using ApiCatalogo.Pagination;
 using ApiCatalogo.Repositories;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,17 @@ public class ProdutosController : ControllerBase
             return NotFound();
 
         return Ok(produtos.ParaProdutoLista());
+    }
+
+    [HttpGet("pagination")]
+    public ActionResult<IEnumerable<ProdutoDTO>> Get([FromQuery]
+    ProdutosParameters produtosParameters)
+    {
+        var produtos = _uof.ProdutoRepository.GetProdutos(produtosParameters);
+
+        var produtosDto = produtos.ParaProdutoLista();
+
+        return Ok(produtosDto);
     }
 
     [HttpGet]
