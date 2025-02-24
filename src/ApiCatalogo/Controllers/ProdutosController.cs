@@ -107,10 +107,10 @@ public class ProdutosController : ControllerBase
         if (!ModelState.IsValid || TryValidateModel(produtoUpdateRequest))
             return BadRequest(ModelState);
 
-        _uof.ProdutoRepository.Update(produtoUpdateRequest.DeProdutoDTOUpdateRequestParaProduto());
+       var produtoFinal =  _uof.ProdutoRepository.Update(produtoUpdateRequest.DeProdutoDTOUpdateRequestParaProduto());
         _uof.Commit();
 
-        return Ok(produtoUpdateRequest.DeProdutoDTOUpdateRequestParaProduto());
+        return Ok(produtoFinal.DeProdutoParaProdutoDTOUpdateResponse());
     }
 
 
