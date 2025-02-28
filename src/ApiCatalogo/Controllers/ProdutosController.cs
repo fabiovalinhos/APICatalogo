@@ -1,10 +1,9 @@
 using ApiCatalogo.DTOs;
-using ApiCatalogo.Models;
 using ApiCatalogo.Pagination;
 using ApiCatalogo.Repositories;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 
 namespace ApiCatalogo.Controllers;
 
@@ -35,6 +34,18 @@ public class ProdutosController : ControllerBase
     ProdutosParameters produtosParameters)
     {
         var produtos = _uof.ProdutoRepository.GetProdutos(produtosParameters);
+
+        var metadata = new
+        {
+            produtos.TotalCount,
+            produtos.PageSize,
+            produtos.CurrentPage,
+            produtos.TotalPages,
+            produtos.HasNext,
+            produtos.HasPreview
+        };
+
+        Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
 
         var produtosDto = produtos.ParaProdutoLista();
 
@@ -100,7 +111,8 @@ public class ProdutosController : ControllerBase
         if (produto is null)
             return NotFound();
 
-        //  TODO: está dando muita volta aqui, preciso pensar melhor e refatorar
+        //  TODO: acho que está certo esta volta toda
+        // preciso pensar melhor
         var produtoUpdateRequest
             = produto.DeProdutoParaProdutoDTOUpdateRequest();
 
