@@ -4,6 +4,7 @@ using ApiCatalogo.Pagination;
 using ApiCatalogo.Repositories;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ApiCatalogo.Controllers;
 
@@ -99,6 +100,7 @@ public class ProdutosController : ControllerBase
         if (produto is null)
             return NotFound();
 
+        //  TODO: está dando muita volta aqui, preciso pensar melhor e refatorar
         var produtoUpdateRequest
             = produto.DeProdutoParaProdutoDTOUpdateRequest();
 
@@ -107,7 +109,12 @@ public class ProdutosController : ControllerBase
         if (!ModelState.IsValid || TryValidateModel(produtoUpdateRequest))
             return BadRequest(ModelState);
 
-       var produtoFinal =  _uof.ProdutoRepository.Update(produtoUpdateRequest.DeProdutoDTOUpdateRequestParaProduto());
+        /// Tenho que mandar produto, senão nao tenho tracking
+        produto.Estoque = produtoUpdateRequest.Estoque;
+        produto.DataCadastro = produtoUpdateRequest.DataCadastro;
+        ///
+
+        var produtoFinal = _uof.ProdutoRepository.Update(produto);
         _uof.Commit();
 
         return Ok(produtoFinal.DeProdutoParaProdutoDTOUpdateResponse());
