@@ -22,3 +22,6 @@ content-type: application/json
     "dataCadastro": "2024-12-18T23:10:48",
     "categoriaId": 1
   }
+
+  ###
+  GET https://localhost:7072/produtos/pagination?PageNumber=1&PageSize=3 HTTP/1.1 

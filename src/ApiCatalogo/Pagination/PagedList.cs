@@ -15,7 +15,7 @@
         public bool HasPreview => CurrentPage > 1;
 
         public bool HasNext => CurrentPage < TotalPages;
-        
+
         //public bool HasPreview
         //{
         //    get { return CurrentPage > 1; }
@@ -29,10 +29,14 @@
 
         public PagedList(List<T> items, int count, int pageNumber, int pageSize)
         {
-            TotalPages = count;
+            TotalCount = count;
             PageSize = pageSize;
             CurrentPage = pageNumber;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+
+            // eu poderia criar uma propriedade List<T> ao invés de herdar a List<T>
+            // para mim ficaria menos sugar syntax
+            AddRange(items);
         }
 
         public static PagedList<T> ToPagedList(IQueryable<T> source, int pageNumber,
