@@ -33,6 +33,7 @@ public class ProdutosController : ControllerBase
     public ActionResult<IEnumerable<ProdutoDTO>> Get([FromQuery]
     ProdutosParameters produtosParameters)
     {
+        //produtos seria a própria lista com propriedades
         var produtos = _uof.ProdutoRepository.GetProdutos(produtosParameters);
 
         var metadata = new
