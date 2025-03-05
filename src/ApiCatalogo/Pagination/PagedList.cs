@@ -35,7 +35,7 @@
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
 
             // eu poderia criar uma propriedade List<T> ao invés de herdar a List<T>
-            // para mim ficaria menos sugar syntax
+            // Usando uma propriedade ficaria menos sugar syntax, menos mágico
             AddRange(items);
         }
 
