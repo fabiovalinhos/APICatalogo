@@ -34,7 +34,7 @@ namespace ApiCatalogo.Controllers
                 return NotFound("Categorias nao encontradas ... ");
             }
 
-            return Ok(categorias.ParaDTOLista());
+            return Ok(categorias.ParaDTOListaMapper());
         }
 
         [HttpGet("{id:int}", Name = "ObterCategoria")]
@@ -56,7 +56,7 @@ namespace ApiCatalogo.Controllers
                 return NotFound($"Categoria id = {id} não encontrada...");
             }
 
-            var categoriaDTO = categoria.ParaDTO();
+            var categoriaDTO = categoria.ParaDTOMapper();
 
             return Ok(categoriaDTO);
         }
@@ -81,7 +81,7 @@ namespace ApiCatalogo.Controllers
 
             Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-            var categoriasDto = categorias.ParaDTOLista();
+            var categoriasDto = categorias.ParaDTOListaMapper();
 
             return Ok(categoriasDto);
         }
@@ -93,12 +93,12 @@ namespace ApiCatalogo.Controllers
             if (categoriaDTO is null)
                 return BadRequest();
 
-            var categoria = categoriaDTO.ParaCategoria();
+            var categoria = categoriaDTO.ParaCategoriaMapper();
 
             var categoriaCriada = _uof.CategoriaRepository.Create(categoria);
             _uof.Commit();
 
-            var novaCategoriaDTO = categoriaCriada.ParaDTO();
+            var novaCategoriaDTO = categoriaCriada.ParaDTOMapper();
 
             return new CreatedAtRouteResult("ObterCategoria",
             new { id = novaCategoriaDTO.CategoriaId }, novaCategoriaDTO);
@@ -113,12 +113,12 @@ namespace ApiCatalogo.Controllers
                 return BadRequest("Invalido ...");
             }
 
-            var categoria = categoriaDTO.ParaCategoria();
+            var categoria = categoriaDTO.ParaCategoriaMapper();
 
             var categoriaAtualizada = _uof.CategoriaRepository.Update(categoria);
             _uof.Commit();
 
-            var novaCategoriaDTO = categoriaAtualizada.ParaDTO();
+            var novaCategoriaDTO = categoriaAtualizada.ParaDTOMapper();
 
             return Ok(novaCategoriaDTO);
         }
@@ -135,7 +135,7 @@ namespace ApiCatalogo.Controllers
             var categoriaExcluida = _uof.CategoriaRepository.Delete(categoria);
             _uof.Commit();
 
-            var categDTO = categoriaExcluida.ParaDTO();
+            var categDTO = categoriaExcluida.ParaDTOMapper();
             return Ok(categDTO);
         }
     }

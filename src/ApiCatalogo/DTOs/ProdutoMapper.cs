@@ -4,7 +4,7 @@ namespace ApiCatalogo.DTOs
 {
     public static class ProdutoMapper
     {
-        public static ProdutoDTO? ParaProdutoDTO(this Produto entidade)
+        public static ProdutoDTO? ParaProdutoDTOMapper(this Produto entidade)
         {
             if (entidade is null) return null;
 
@@ -20,7 +20,7 @@ namespace ApiCatalogo.DTOs
             };
         }
 
-        public static Produto? ParaEntidadeProduto(this ProdutoDTO entidade)
+        public static Produto? ParaEntidadeProdutoMapper(this ProdutoDTO entidade)
         {
             if (entidade is null) return null;
 
@@ -36,7 +36,7 @@ namespace ApiCatalogo.DTOs
             };
         }
 
-        public static IEnumerable<ProdutoDTO> ParaProdutoLista(this IEnumerable<Produto> entidade)
+        public static IEnumerable<ProdutoDTO> ParaProdutoListaMapper(this IEnumerable<Produto> entidade)
         {
             if (entidade is null || !entidade.Any())
             {
@@ -56,7 +56,7 @@ namespace ApiCatalogo.DTOs
         }
 
 
-        public static ProdutoDTOUpdateRequest? DeProdutoParaProdutoDTOUpdateRequest(this Produto entidade)
+        public static ProdutoDTOUpdateRequest? DeProdutoParaProdutoDTOUpdateRequestMapper(this Produto entidade)
         {
             if (entidade is null) return null;
 
@@ -67,7 +67,7 @@ namespace ApiCatalogo.DTOs
             };
         }
 
-        public static Produto? DeProdutoDTOUpdateRequestParaProduto(this ProdutoDTOUpdateRequest entidade)
+        public static Produto? DeProdutoDTOUpdateRequestParaProdutoMapper(this ProdutoDTOUpdateRequest entidade)
         {
             if (entidade is null) return null;
 
@@ -78,7 +78,7 @@ namespace ApiCatalogo.DTOs
             };
         }
 
-        public static ProdutoDTOUpdateResponse? DeProdutoParaProdutoDTOUpdateResponse(this Produto entidade)
+        public static ProdutoDTOUpdateResponse? DeProdutoParaProdutoDTOUpdateResponseMapper(this Produto entidade)
         {
             if (entidade is null) return null;
 
@@ -96,7 +96,7 @@ namespace ApiCatalogo.DTOs
             };
         }
 
-        public static Produto? DeProdutoDTOUpdateResponseParaProduto(this ProdutoDTOUpdateResponse entidade)
+        public static Produto? DeProdutoDTOUpdateResponseParaProdutoMapper(this ProdutoDTOUpdateResponse entidade)
         {
             if (entidade is null) return null;
 
