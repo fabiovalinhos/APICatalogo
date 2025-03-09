@@ -68,7 +68,21 @@ namespace ApiCatalogo.Controllers
         {
             //categorias seria a própria lista com propriedades
             var categorias = _uof.CategoriaRepository.GetCategorias(categoriasParameters);
+            return ObterCategorias(categorias);
+        }
 
+        [HttpGet("filter/nome/paginacao")]
+        public ActionResult<IEnumerable<CategoriaDTO>> GetCategoriasFiltradas([FromQuery]
+    CategoriasFiltroNome categoriasFiltroNome)
+        {
+            var categoriasFiltradas = _uof.CategoriaRepository.GetCategoriasFiltroNome(categoriasFiltroNome);
+
+            return ObterCategorias(categoriasFiltradas);
+        }
+        
+
+        private ActionResult<IEnumerable<CategoriaDTO>> ObterCategorias(PagedList<Models.Categoria> categorias)
+        {
             var metadata = new
             {
                 categorias.TotalCount,
@@ -85,7 +99,6 @@ namespace ApiCatalogo.Controllers
 
             return Ok(categoriasDto);
         }
-
 
         [HttpPost]
         public ActionResult<CategoriaDTO> Post(CategoriaDTO categoriaDTO)
