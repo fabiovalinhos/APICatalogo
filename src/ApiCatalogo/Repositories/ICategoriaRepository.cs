@@ -3,10 +3,10 @@ using ApiCatalogo.Pagination;
 
 namespace ApiCatalogo.Repositories
 {
-    public interface ICategoriaRepository: IRepository<Categoria>
+    public interface ICategoriaRepository : IRepository<Categoria>
     {
-        PagedList<Categoria> GetCategorias(CategoriasParameters categoriasParameters);
+        Task<PagedList<Categoria>> GetCategoriasAsync(CategoriasParameters categoriasParameters);
 
-        PagedList<Categoria> GetCategoriasFiltroNome(CategoriasFiltroNome categoriasFiltroNome);
+        Task<PagedList<Categoria>> GetCategoriasFiltroNomeAsync(CategoriasFiltroNome categoriasFiltroNome);
     }
 }

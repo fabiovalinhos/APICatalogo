@@ -3,12 +3,12 @@ using ApiCatalogo.Pagination;
 
 namespace ApiCatalogo.Repositories
 {
-    public interface IProdutoRepository: IRepository<Produto>
+    public interface IProdutoRepository : IRepository<Produto>
     {
-        PagedList<Produto> GetProdutos(ProdutosParameters produtosParameters);
+        Task<PagedList<Produto>> GetProdutosAsync(ProdutosParameters produtosParameters);
 
-        PagedList<Produto> GetProdutoFiltroPreco(ProdutosFiltroPreco produtosFiltroPreco);
+        Task<PagedList<Produto>> GetProdutoFiltroPrecoAsync(ProdutosFiltroPreco produtosFiltroPreco);
 
-        IEnumerable<Produto> GetProdutoPorCategoria(int id);
+        Task<IEnumerable<Produto>> GetProdutoPorCategoriaAsync(int id);
     }
 }

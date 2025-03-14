@@ -10,29 +10,33 @@ namespace ApiCatalogo.Repositories
         {
         }
 
-        public IEnumerable<Produto> GetProdutoPorCategoria(int id)
+        public async Task<IEnumerable<Produto>> GetProdutoPorCategoriaAsync(int id)
         {
-            return GetAll().Where(c => c.CategoriaId == id);
+
+            var produtos = await GetAllAsync();
+            var produtosCategoria = produtos.Where(c => c.CategoriaId == id);
+
+            return produtosCategoria;
         }
 
-        public PagedList<Produto> GetProdutos(ProdutosParameters produtosParameters)
+        public async Task<PagedList<Produto>> GetProdutosAsync(ProdutosParameters produtosParameters)
         {
-            var produtos = GetAll()
+            var produtos = await GetAllAsync();
+
+            var produtosOrdenados = produtos
                 .OrderBy(p => p.ProdutoId)
                 .AsQueryable();
 
-            var produtosOrdenados =
+            var resultado =
                 PagedList<Produto>.ToPagedList(
-                    produtos, produtosParameters.PageNumber, produtosParameters.PageSize);
+                    produtosOrdenados, produtosParameters.PageNumber, produtosParameters.PageSize);
 
-            return produtosOrdenados;
+            return resultado;
         }
 
-        public PagedList<Produto> GetProdutoFiltroPreco(ProdutosFiltroPreco produtosFiltroPreco)
+        public async Task<PagedList<Produto>> GetProdutoFiltroPrecoAsync(ProdutosFiltroPreco produtosFiltroPreco)
         {
-            var produtos =
-               GetAll()
-               .AsQueryable();
+            var produtos = await GetAllAsync();
 
             if (produtosFiltroPreco.Preco.HasValue &&
                 !string.IsNullOrEmpty(produtosFiltroPreco.PrecoCriterio))
@@ -56,7 +60,7 @@ namespace ApiCatalogo.Repositories
 
             var produtosFiltradosEPaginados =
                 PagedList<Produto>.ToPagedList(
-                    produtos, produtosFiltroPreco.PageNumber,produtosFiltroPreco.PageSize);
+                    produtos.AsQueryable(), produtosFiltroPreco.PageNumber, produtosFiltroPreco.PageSize);
 
             return produtosFiltradosEPaginados;
         }

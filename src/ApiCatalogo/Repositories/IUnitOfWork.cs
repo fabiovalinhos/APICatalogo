@@ -11,6 +11,6 @@ namespace ApiCatalogo.Repositories
 
         ICategoriaRepository CategoriaRepository { get;}
 
-        void Commit();
+        Task CommitAsync();
     }
 }
