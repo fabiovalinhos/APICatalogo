@@ -13,9 +13,17 @@ namespace ApiCatalogo.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? predicate)
         {
-            return await _context.Set<T>().AsNoTracking().ToListAsync();
+
+            var query = _context.Set<T>().AsNoTracking();
+
+            if (predicate is not null)
+            {
+                query = query.Where(predicate);
+            }
+
+            return await query.ToListAsync();
         }
 
 
@@ -23,6 +31,7 @@ namespace ApiCatalogo.Repositories
         {
             return await _context.Set<T>().FirstOrDefaultAsync(predicate);
         }
+
 
         public T Create(T entity)
         {

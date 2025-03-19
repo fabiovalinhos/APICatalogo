@@ -27,7 +27,7 @@ namespace ApiCatalogo.Controllers
         [ServiceFilter(typeof(ApiLoggingFilter))]
         public async Task<ActionResult<IEnumerable<CategoriaDTO>>> Get()
         {
-            var categorias = await _uof.CategoriaRepository.GetAllAsync();
+            var categorias = await _uof.CategoriaRepository.GetAllAsync(null);
 
             if (categorias is null)
             {

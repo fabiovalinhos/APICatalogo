@@ -13,15 +13,14 @@ namespace ApiCatalogo.Repositories
         public async Task<IEnumerable<Produto>> GetProdutoPorCategoriaAsync(int id)
         {
 
-            var produtos = await GetAllAsync();
-            var produtosCategoria = produtos.Where(c => c.CategoriaId == id);
+            var produtosCategoria = await GetAllAsync(c => c.CategoriaId == id);
 
             return produtosCategoria;
         }
 
         public async Task<PagedList<Produto>> GetProdutosAsync(ProdutosParameters produtosParameters)
         {
-            var produtos = await GetAllAsync();
+            var produtos = await GetAllAsync(null);
 
             var produtosOrdenados = produtos
                 .OrderBy(p => p.ProdutoId)
@@ -36,27 +35,30 @@ namespace ApiCatalogo.Repositories
 
         public async Task<PagedList<Produto>> GetProdutoFiltroPrecoAsync(ProdutosFiltroPreco produtosFiltroPreco)
         {
-            var produtos = await GetAllAsync();
+            IEnumerable<Produto> produtos = new List<Produto>();
 
             if (produtosFiltroPreco.Preco.HasValue &&
                 !string.IsNullOrEmpty(produtosFiltroPreco.PrecoCriterio))
             {
                 if (produtosFiltroPreco.PrecoCriterio.Equals("maior", StringComparison.OrdinalIgnoreCase))
                 {
-                    produtos = produtos.Where(p => p.Preco > produtosFiltroPreco.Preco.Value)
-                        .OrderBy(p => p.Preco);
+                    produtos = await GetAllAsync(p => p.Preco > produtosFiltroPreco.Preco.Value);
                 }
                 else if (produtosFiltroPreco.PrecoCriterio.Equals("menor", StringComparison.OrdinalIgnoreCase))
                 {
-                    produtos = produtos.Where(p => p.Preco < produtosFiltroPreco.Preco.Value)
-                        .OrderBy(p => p.Preco);
+                    produtos = await GetAllAsync(p => p.Preco < produtosFiltroPreco.Preco.Value);
                 }
                 else if (produtosFiltroPreco.PrecoCriterio.Equals("igual", StringComparison.OrdinalIgnoreCase))
                 {
-                    produtos = produtos.Where(p => p.Preco == produtosFiltroPreco.Preco.Value)
-                        .OrderBy(p => p.Preco);
+                    produtos = await GetAllAsync(p => p.Preco == produtosFiltroPreco.Preco.Value);
                 }
             }
+            else
+            {
+                produtos = await GetAllAsync(null);
+            }
+
+            produtos = produtos.OrderBy(p => p.Preco);
 
             var produtosFiltradosEPaginados =
                 PagedList<Produto>.ToPagedList(

@@ -69,7 +69,7 @@ public class ProdutosController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProdutoDTO>>> Get()
     {
-        var produtos = await _uof.ProdutoRepository.GetAllAsync();
+        var produtos = await _uof.ProdutoRepository.GetAllAsync(null);
 
         if (produtos is null)
         {

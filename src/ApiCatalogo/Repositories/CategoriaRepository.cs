@@ -13,7 +13,7 @@ namespace ApiCatalogo.Repositories
 
         public async Task<PagedList<Categoria>> GetCategoriasAsync(CategoriasParameters categoriasParameters)
         {
-            var categorias = await GetAllAsync();
+            var categorias = await GetAllAsync(null);
 
             var categoriasOrdenadas = categorias
                 .OrderBy(p => p.CategoriaId)
@@ -28,17 +28,22 @@ namespace ApiCatalogo.Repositories
 
         public async Task<PagedList<Categoria>> GetCategoriasFiltroNomeAsync(CategoriasFiltroNome categoriasFiltroNome)
         {
-            var categorias = await GetAllAsync();
+            IEnumerable<Categoria> categorias;
 
             if (!string.IsNullOrEmpty(categoriasFiltroNome.Nome))
             {
-                categorias = categorias.Where(c => c.Nome.Contains(categoriasFiltroNome.Nome));
+                categorias = 
+                    await GetAllAsync(c => c.Nome.Contains(categoriasFiltroNome.Nome));
+            }
+            else
+            {
+                categorias = await GetAllAsync(null);
             }
 
-            var categoriasFiltradas =
-            PagedList<Categoria>.ToPagedList(
-                categorias.AsQueryable(), categoriasFiltroNome.PageNumber, categoriasFiltroNome.PageSize
-            );
+                var categoriasFiltradas =
+                PagedList<Categoria>.ToPagedList(
+                    categorias.AsQueryable(), categoriasFiltroNome.PageNumber, categoriasFiltroNome.PageSize
+                );
 
             return categoriasFiltradas;
         }
