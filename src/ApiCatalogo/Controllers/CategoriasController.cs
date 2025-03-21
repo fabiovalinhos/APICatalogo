@@ -2,6 +2,7 @@ using ApiCatalogo.DTOs;
 using ApiCatalogo.Filters;
 using ApiCatalogo.Pagination;
 using ApiCatalogo.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -25,6 +26,7 @@ namespace ApiCatalogo.Controllers
 
         [HttpGet]
         [ServiceFilter(typeof(ApiLoggingFilter))]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<CategoriaDTO>>> Get()
         {
             var categorias = await _uof.CategoriaRepository.GetAllAsync(null);

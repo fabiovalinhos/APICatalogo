@@ -4,6 +4,7 @@ using ApiCatalogo.Extentions;
 using ApiCatalogo.Filters;
 using ApiCatalogo.Logging;
 using ApiCatalogo.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,13 @@ builder.Services.AddControllers(
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddAuthentication();
+builder.Services.AddAuthentication("Bearer").AddJwtBearer();
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
+
 var mySqlConnection =
 builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -32,7 +40,7 @@ builder.Services.AddScoped<ApiLoggingFilter>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggingProviderConfiguration
@@ -53,7 +61,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
+// app.UseAuthentication(); // já defini lá em cima
 app.UseAuthorization();
 
 app.Use(async (context, next) =>
