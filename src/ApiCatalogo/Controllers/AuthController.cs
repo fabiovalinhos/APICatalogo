@@ -71,7 +71,8 @@ namespace ApiCatalogo.Controllers
                 await _userManager.UpdateAsync(user);
 
                 return Ok(
-                    new{
+                    new
+                    {
                         Token = new JwtSecurityTokenHandler().WriteToken(token),
                         RefreshToken = refreshtoken,
                         Expiration = token.ValidTo
@@ -80,6 +81,42 @@ namespace ApiCatalogo.Controllers
             }
 
             return Unauthorized();
+        }
+
+
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterModelDTO model)
+        {
+            var userExists = await _userManager.FindByNameAsync(model.Username!);
+
+            if (userExists is not null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ResponseDTO { Status = "Error", Message = "User already exists!" });
+
+            }
+            ApplicationUser user = new()
+            {
+                Email = model.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = model.Username
+            };
+
+            var result =
+                await _userManager.CreateAsync(user, model.Password!);
+
+            if (!result.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ResponseDTO { Status = "Error", Message = "User creation failed!" });
+            }
+
+            return Ok(new ResponseDTO
+            {
+                Status = "Success",
+                Message = "User created successfully!"
+            });
         }
     }
 }
