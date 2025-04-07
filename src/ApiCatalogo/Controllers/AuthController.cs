@@ -129,11 +129,13 @@ namespace ApiCatalogo.Controllers
                 return BadRequest("Invalid client request");
             }
 
+            ////// retirando os valores do model
             string? accessToken = tokenModel.AccessToken
                 ?? throw new ArgumentNullException(nameof(tokenModel));
 
             string? refreshToken =
                             tokenModel.RefreshToken ?? throw new ArgumentNullException(nameof(tokenModel));
+            /////
 
             var principal =
                 _tokenServices.GetPrincipalFromExpiredToken(accessToken,

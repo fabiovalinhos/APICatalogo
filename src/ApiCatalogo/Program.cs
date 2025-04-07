@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.OpenApi;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +28,9 @@ builder.Services.AddControllers(
                 = ReferenceHandler.IgnoreCycles).AddNewtonsoftJson();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// Configura OpenAPI com suporte à autenticação JWT
 builder.Services.AddOpenApi();
+
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 .AddEntityFrameworkStores<AppDbContext>()
@@ -94,6 +98,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 // app.UseAuthentication(); // já defini lá em cima
 app.UseAuthorization();
+
 
 app.Use(async (context, next) =>
 {
