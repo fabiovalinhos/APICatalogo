@@ -19,6 +19,12 @@ GET http://localhost:5038/Categorias HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImZhYmlvdmFsaW5ob3MiLCJlbWFpbCI6ImZhYmlvdmFsaW5ob3NAZ21haWwuY29tIiwianRpIjoiZGJjZTUxMzgtYWEzNi00NjQ3LTgxMzUtMzZlZDRiOWVlYjE5IiwibmJmIjoxNzQ0Mzc3MDIxLCJleHAiOjE3NDQzNzcyMDEsImlhdCI6MTc0NDM3NzAyMSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDY2IiwiYXVkIjpbImh0dHA6Ly9sb2NhbGhvc3Q6NzA2NiIsImh0dHA6Ly9sb2NhbGhvc3Q6NzA2NiJdfQ.Y2vvtoHyGFnhJzo4GMn926yvQWbSJkJL0xg581QNfsA
 
+####
+
+POST http://localhost:5038/api/Auth/CreateRole
+  ?roleName=Admin
+
+
 ###
 POST  http://localhost:5038/api/Auth/refresh-token
 Content-Type: application/json
