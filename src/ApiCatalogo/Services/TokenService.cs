@@ -56,6 +56,7 @@ namespace ApiCatalogo.Services
         {
             var secretKey = _config["JWT:SecretKey"] ?? throw new InvalidOperationException("Invalid key");
 
+            // o que será validado durante a validação do token
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateAudience = false,

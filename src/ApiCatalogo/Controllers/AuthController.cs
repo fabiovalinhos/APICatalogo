@@ -144,11 +144,11 @@ namespace ApiCatalogo.Controllers
                 return BadRequest("Invalid access token/refresh token");
             }
 
-            string username = principal.Identity.Name;
+            string username = principal.Identity!.Name ?? string.Empty;
 
             var user = await _userManager.FindByNameAsync(username!);
 
-            if (user is null || user.RefreshToken != refreshToken
+            if (user == null || user.RefreshToken != refreshToken
                 || user.RefreshTokenExpiryTime <= DateTime.Now)
             {
                 return BadRequest("Invalid access token/refresh token");
