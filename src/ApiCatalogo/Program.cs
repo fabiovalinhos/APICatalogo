@@ -68,8 +68,15 @@ builder.Services.AddAuthentication(options =>
 
     };
 });
-
+//////
 ////
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(); //5:33
+});
+
+
 
 builder.Services.AddScoped<ApiLoggingFilter>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
