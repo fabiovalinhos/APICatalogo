@@ -1,4 +1,6 @@
-GET https://localhost:7072/produtos HTTP/1.1
+GET http://localhost:5038/produtos HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImZhYmlvdmFsaW5ob3MiLCJlbWFpbCI6ImZhYmlvdmFsaW5ob3NAZ21haWwuY29tIiwianRpIjoiZGJjZTUxMzgtYWEzNi00NjQ3LTgxMzUtMzZlZDRiOWVlYjE5IiwibmJmIjoxNzQ0Mzc3MDIxLCJleHAiOjE3NDQzNzcyMDEsImlhdCI6MTc0NDM3NzAyMSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDY2IiwiYXVkIjpbImh0dHA6Ly9sb2NhbGhvc3Q6NzA2NiIsImh0dHA6Ly9sb2NhbGhvc3Q6NzA2NiJdfQ.Y2vvtoHyGFnhJzo4GMn926yvQWbSJkJL0xg581QNfsA
 
 ###
 GET https://localhost:7072/categorias HTTP/1.1
@@ -13,11 +15,38 @@ GET https://localhost:7072/categorias/2 HTTP/1.1
 GET https://localhost:7072/produtos/pagination?PageNumber=1&PageSize=3 HTTP/1.1 
 
 ###
-GET https://localhost:7072/Categorias HTTP/1.1
+GET http://localhost:5038/Categorias HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImZhYmlvdmlsYWxiYSIsInN1YiI6ImZhYmlvdmlsYWxiYSIsImp0aSI6IjUzYzAzNTkxIiwiYXVkIjpbImh0dHA6Ly9sb2NhbGhvc3Q6NTAzOCIsImh0dHBzOi8vbG9jYWxob3N0OjcwNzIiXSwibmJmIjoxNzQyNTc3MTUxLCJleHAiOjE3NTA1MjU5NTEsImlhdCI6MTc0MjU3NzE1MSwiaXNzIjoiZG90bmV0LXVzZXItand0cyJ9.NBPTEqABaYEH7Km_kQDC5LoeZklAm5QNcBQ3LNMBjRM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImZhYmlvdmFsaW5ob3MiLCJlbWFpbCI6ImZhYmlvdmFsaW5ob3NAZ21haWwuY29tIiwianRpIjoiZGJjZTUxMzgtYWEzNi00NjQ3LTgxMzUtMzZlZDRiOWVlYjE5IiwibmJmIjoxNzQ0Mzc3MDIxLCJleHAiOjE3NDQzNzcyMDEsImlhdCI6MTc0NDM3NzAyMSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDY2IiwiYXVkIjpbImh0dHA6Ly9sb2NhbGhvc3Q6NzA2NiIsImh0dHA6Ly9sb2NhbGhvc3Q6NzA2NiJdfQ.Y2vvtoHyGFnhJzo4GMn926yvQWbSJkJL0xg581QNfsA
+
+####
+
+POST http://localhost:5038/api/Auth/CreateRole
+  ?roleName=Admin
+
 
 ###
+POST  http://localhost:5038/api/Auth/refresh-token
+Content-Type: application/json
+ 
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImZhYmlvdmFsaW5ob3MiLCJlbWFpbCI6ImZhYmlvdmFsaW5ob3NAZ21haWwuY29tIiwianRpIjoiZGJjZTUxMzgtYWEzNi00NjQ3LTgxMzUtMzZlZDRiOWVlYjE5IiwibmJmIjoxNzQ0Mzc2Nzk0LCJleHAiOjE3NDQzNzY5NzQsImlhdCI6MTc0NDM3Njc5NCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDY2IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo3MDY2In0.CH-VlF723yPewPqZgknN8zvjwojDCzCaydVvPcspIgE",
+  "refreshToken": "yf2s7neJmhiL5BYM9B_RIjiK4i2T2qlfJzf0QaXvvLQ"
+}
+
+###
+
+POST http://localhost:5038/api/Auth/login 
+Content-Type: application/json
+
+{
+  "userName": "fabiovalinhos",
+  "password": "Cebolinha7355!"
+}
+
+
+###
+
 POST https://localhost:7072/produtos HTTP/1.1
 content-type: application/json
 

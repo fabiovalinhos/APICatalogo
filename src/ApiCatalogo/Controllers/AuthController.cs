@@ -21,17 +21,64 @@ namespace ApiCatalogo.Controllers
 
         private readonly IConfiguration _configuration;
 
+        private readonly ILogger<AuthController> _logger;
+
 
         public AuthController(
             ITokenServices tokenServices,
             UserManager<ApplicationUser> userManager,
              RoleManager<IdentityRole> roleManager,
-             IConfiguration configuration)
+             IConfiguration configuration,
+             ILogger<AuthController> logger)
         {
             _tokenServices = tokenServices;
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _logger = logger;
+        }
+
+        [HttpPost]
+        [Route("CreateRole")]
+        public async Task<IActionResult> CreateRole(string roleName)
+        {
+            var roleExist = await _roleManager.RoleExistsAsync(roleName);
+
+            if (!roleExist)
+            {
+                var roleResult =
+                await _roleManager.CreateAsync(new IdentityRole(roleName));
+
+                if (roleResult.Succeeded)
+                {
+                    _logger.LogInformation(1, "Roles Added");
+
+                    return StatusCode(StatusCodes.Status200OK,
+                    new ResponseDTO
+                    {
+                        Status = "Success",
+                        Message = $"Role {roleName} added successfully"
+                    });
+                }
+                else
+                {
+                    _logger.LogInformation(2, "Error");
+
+                    return StatusCode(StatusCodes.Status400BadRequest,
+                    new ResponseDTO
+                    {
+                        Status = "Error",
+                        Message = $"Issue adding the new {roleName} role"
+                    });
+                }
+            }
+
+            return StatusCode(StatusCodes.Status400BadRequest,
+                               new ResponseDTO
+                               {
+                                   Status = "Error",
+                                   Message = $"Role already exist"
+                               });
         }
 
 
@@ -146,11 +193,11 @@ namespace ApiCatalogo.Controllers
                 return BadRequest("Invalid access token/refresh token");
             }
 
-            string username = principal.Identity.Name;
+            string username = principal.Identity!.Name ?? string.Empty;
 
             var user = await _userManager.FindByNameAsync(username!);
 
-            if (user is null || user.RefreshToken != refreshToken
+            if (user == null || user.RefreshToken != refreshToken
                 || user.RefreshTokenExpiryTime <= DateTime.Now)
             {
                 return BadRequest("Invalid access token/refresh token");
