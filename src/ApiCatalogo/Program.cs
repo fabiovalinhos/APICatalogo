@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.OpenApi;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -73,7 +72,19 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy(); //5:33
+    options.AddPolicy("AdminOnly",
+                        options => options.RequireRole("Admin"));
+    options.AddPolicy("SuperAdminOnly",
+                        options => options.RequireRole("Admin")
+                        .RequireClaim("id", "fabiovalinhos"));
+    options.AddPolicy("UserOnly",
+                        options => options.RequireRole("User"));
+    options.AddPolicy("ExclusivePolicyOnly",
+                        options => options.RequireAssertion(context => context.User.HasClaim(
+                            c => c.Type == "id" &&
+                            c.Value == "fabiovalinhos")
+                            || context.User.IsInRole("SuperAdmin")));
+
 });
 
 
