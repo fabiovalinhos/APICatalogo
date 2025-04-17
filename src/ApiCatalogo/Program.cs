@@ -70,6 +70,7 @@ builder.Services.AddAuthentication(options =>
 //////
 ////
 
+// TODO: eu preciso verificar estas roles SuperAdmin como esta registrado no banco
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly",
@@ -79,12 +80,11 @@ builder.Services.AddAuthorization(options =>
                         .RequireClaim("id", "fabiovalinhos"));
     options.AddPolicy("UserOnly",
                         options => options.RequireRole("User"));
-    options.AddPolicy("ExclusivePolicyOnly",
+    options.AddPolicy("ExclusiveOnly",
                         options => options.RequireAssertion(context => context.User.HasClaim(
                             c => c.Type == "id" &&
                             c.Value == "fabiovalinhos")
-                            || context.User.IsInRole("SuperAdmin")));
-
+                            || context.User.IsInRole("SuperAdminOnly")));
 });
 
 
@@ -114,7 +114,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-// app.UseAuthentication(); // já defini lá em cima
+app.UseAuthentication();
 app.UseAuthorization();
 
 

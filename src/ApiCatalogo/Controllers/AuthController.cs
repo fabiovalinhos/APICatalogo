@@ -40,6 +40,7 @@ namespace ApiCatalogo.Controllers
 
         [HttpPost]
         [Route("CreateRole")]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> CreateRole(string roleName)
         {
             var roleExist = await _roleManager.RoleExistsAsync(roleName);
@@ -83,6 +84,7 @@ namespace ApiCatalogo.Controllers
 
         [HttpPost]
         [Route("AddUserToRole")]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> AddUserToRole(string email, string roleName)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -123,7 +125,6 @@ namespace ApiCatalogo.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModelDTO model)
         {
-
             var user = await _userManager.FindByNameAsync(model.UserName!);
 
             if (user is not null && await _userManager.CheckPasswordAsync(user, model.Password!))
@@ -259,7 +260,7 @@ namespace ApiCatalogo.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Policy = "ExclusiveOnly")]
         [HttpPost]
         [Route("revoke/{username}")]
         public async Task<IActionResult> Revoke(string username)
