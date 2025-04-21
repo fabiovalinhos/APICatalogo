@@ -26,6 +26,17 @@ builder.Services.AddControllers(
                 options.JsonSerializerOptions.ReferenceHandler
                 = ReferenceHandler.IgnoreCycles).AddNewtonsoftJson();
 
+var OrigensComAcessoPermitido = "_origensComAcessoPermitido";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: OrigensComAcessoPermitido,
+                      builder =>
+                      {
+                          builder.WithOrigins("https://apirequest.io");
+                      });
+});
+
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 // Configura OpenAPI com suporte à autenticação JWT
 builder.Services.AddOpenApi();
@@ -114,6 +125,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+
+app.UseCors(OrigensComAcessoPermitido);
+
 app.UseAuthentication();
 app.UseAuthorization();
 
