@@ -32,7 +32,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: OrigensComAcessoPermitido,
                       builder =>
                       {
-                          builder.WithOrigins("https://apirequest.io");
+                          builder.WithOrigins("https://apirequest.io")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
                       });
 });
 
