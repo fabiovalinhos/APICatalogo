@@ -81,7 +81,7 @@ public class ProdutosController : ControllerBase
         return Ok(produtos.ParaProdutoListaMapper());
     }
 
-    [HttpGet("id:int:min(1)", Name = "ObterProduto")]
+    [HttpGet("{id:int:min(1)}", Name = "ObterProduto")]
     public async Task<ActionResult<ProdutoDTO>> Get(int id)
     {
         var produto = await _uof.ProdutoRepository.GetAsync(p => p.ProdutoId == id);

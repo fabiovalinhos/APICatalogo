@@ -30,9 +30,9 @@ var OrigensComAcessoPermitido = "_origensComAcessoPermitido";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: OrigensComAcessoPermitido,
-                      builder =>
+                      policy =>
                       {
-                          builder.WithOrigins("https://apirequest.io")
+                          policy.WithOrigins("https://apirequest.io")
                           .AllowAnyMethod()
                           .AllowAnyHeader();
                       });
@@ -83,7 +83,7 @@ builder.Services.AddAuthentication(options =>
 //////
 ////
 
-// TODO: eu preciso verificar estas roles SuperAdmin como esta registrado no banco
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly",
