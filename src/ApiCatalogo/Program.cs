@@ -139,8 +139,19 @@ app.UseAuthorization();
 app.Use(async (context, next) =>
 {
     // adiciona o código antes do request
-    await next(context);
+    //await next(context);
     // adiciona o código depois do request
+    
+    //teste para CORS
+    try
+    {
+        await next();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Erro no servidor: {ex.Message}");
+        throw;
+    }
 }
 );
 
