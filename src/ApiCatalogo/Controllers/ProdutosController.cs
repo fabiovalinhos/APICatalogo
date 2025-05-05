@@ -164,7 +164,7 @@ public class ProdutosController : ControllerBase
 
 
     [HttpDelete("{id:int}")]
-    public async Task< ActionResult<ProdutoDTO>> Delete(int id)
+    public async Task<ActionResult<ProdutoDTO>> Delete(int id)
     {
         var produto = await _uof.ProdutoRepository.GetAsync(p => p.ProdutoId == id);
 

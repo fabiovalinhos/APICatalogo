@@ -28,15 +28,14 @@ builder.Services.AddControllers(
 
 var OrigensComAcessoPermitido = "_origensComAcessoPermitido";
 builder.Services.AddCors(options =>
-{
     options.AddPolicy(name: OrigensComAcessoPermitido,
                       policy =>
                       {
                           policy.WithOrigins("https://apirequest.io")
                           .AllowAnyMethod()
                           .AllowAnyHeader();
-                      });
-});
+                      })
+);
 
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -56,6 +55,7 @@ options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
 
 //// JWT
 ///////
+
 var secretKey = builder.Configuration["JWT:SecretKey"]
     ?? throw new ArgumentException("Invalid secret key!!");
 
@@ -150,7 +150,8 @@ app.Use(async (context, next) =>
     catch (Exception ex)
     {
         Console.WriteLine($"Erro no servidor: {ex.Message}");
-        throw;
+        Console.WriteLine(ex.StackTrace);
+        throw; 
     }
 }
 );
