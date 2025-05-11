@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Depurador para o VsCode (HTTPS)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/ApiCatalogo/bin/Debug/net9.0/ApiCatalogo.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/ApiCatalogo",  // Define o diretório onde o seu Program.cs está localizado
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "https://localhost:7072"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        }
+    ]
+}
