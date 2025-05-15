@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
 using ApiCatalogo.Context;
 using ApiCatalogo.Extentions;
 using ApiCatalogo.Filters;
@@ -9,6 +10,7 @@ using ApiCatalogo.Repositories;
 using ApiCatalogo.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
@@ -31,7 +33,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: OrigensComAcessoPermitido,
                       policy =>
                       {
-                          policy.WithOrigins("https://apirequest.io")
+                          policy.WithOrigins(
+                                "https://apirequest.io",
+                                "https://localhost:7072",
+                                "https://localhost:5038",
+                                "http://localhost:7072",
+                                "http://localhost:5038"
+                          )
                           .AllowAnyMethod()
                           .AllowAnyHeader();
                       })
@@ -101,6 +109,38 @@ builder.Services.AddAuthorization(options =>
 });
 
 
+//Política de RateLimiter chamada de FixedWindow 
+builder.Services.AddRateLimiter(rateLimiterOptions =>
+{
+    rateLimiterOptions.AddFixedWindowLimiter(policyName: "fixedwindow", options =>
+        {
+            options.PermitLimit = 1;
+            options.Window = TimeSpan.FromSeconds(5);
+            options.QueueLimit = 2;
+            options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        });
+    rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
+// Aqui é um RateLimiter global
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpcontext =>
+    RateLimitPartition.GetFixedWindowLimiter(
+        partitionKey: httpcontext.User.Identity?.Name ?? httpcontext.Request.Headers.Host.ToString(),
+        factory: partition =>
+        new FixedWindowRateLimiterOptions
+        {
+            AutoReplenishment = true,
+            PermitLimit = 2,
+            QueueLimit = 0,
+            Window = TimeSpan.FromSeconds(10),
+        }
+    ));
+});
+
+
 
 builder.Services.AddScoped<ApiLoggingFilter>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
@@ -130,6 +170,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseRateLimiter();
+
 app.UseCors(OrigensComAcessoPermitido);
 
 app.UseAuthentication();
@@ -141,7 +183,7 @@ app.Use(async (context, next) =>
     // adiciona o código antes do request
     //await next(context);
     // adiciona o código depois do request
-    
+
     //teste para CORS
     try
     {
@@ -151,7 +193,7 @@ app.Use(async (context, next) =>
     {
         Console.WriteLine($"Erro no servidor: {ex.Message}");
         Console.WriteLine(ex.StackTrace);
-        throw; 
+        throw;
     }
 }
 );
