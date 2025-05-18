@@ -11,8 +11,7 @@ namespace ApiCatalogo.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    // se eu quiser usar esta politica de rate limiting, descomento a linha
-    // [EnableRateLimiting("fixedwindow")]
+    [EnableRateLimiting("fixedwindow")]
     public class CategoriasController : ControllerBase
     {
         private readonly IUnitOfWork _uof;
