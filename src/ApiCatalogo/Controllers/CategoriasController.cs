@@ -12,6 +12,7 @@ namespace ApiCatalogo.Controllers
     [ApiController]
     [Route("[controller]")]
     [EnableRateLimiting("fixedwindow")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class CategoriasController : ControllerBase
     {
         private readonly IUnitOfWork _uof;
@@ -38,7 +39,7 @@ namespace ApiCatalogo.Controllers
             {
                 return NotFound("Categorias nao encontradas ... ");
             }
-            
+
             return Ok(categorias.ParaDTOListaMapper());
         }
 
@@ -124,7 +125,7 @@ namespace ApiCatalogo.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task< ActionResult<CategoriaDTO>> Put(int id, CategoriaDTO categoriaDTO)
+        public async Task<ActionResult<CategoriaDTO>> Put(int id, CategoriaDTO categoriaDTO)
         {
             if (id != categoriaDTO.CategoriaId)
             {
@@ -144,7 +145,7 @@ namespace ApiCatalogo.Controllers
 
         [HttpDelete("{id:int}")]
         [Authorize(Policy = "AdminOnly")]
-        public async Task <ActionResult<CategoriaDTO>> Delete(int id)
+        public async Task<ActionResult<CategoriaDTO>> Delete(int id)
         {
             var categoria = await _uof.CategoriaRepository.GetAsync(c => c.CategoriaId == id);
 

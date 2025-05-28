@@ -11,6 +11,7 @@ namespace ApiCatalogo.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class AuthController : ControllerBase
     {
         private readonly ITokenServices _tokenServices;
@@ -106,9 +107,9 @@ namespace ApiCatalogo.Controllers
                 }
                 else
                 {
-                    _logger.LogInformation(1, 
+                    _logger.LogInformation(1,
                         $"Error: Unable to add user {user.Email} to the {roleName} role");
-                    return StatusCode(StatusCodes.Status400BadRequest, 
+                    return StatusCode(StatusCodes.Status400BadRequest,
                         new ResponseDTO
                         {
                             Status = "Error",
@@ -117,7 +118,7 @@ namespace ApiCatalogo.Controllers
                 }
             }
 
-            return BadRequest(new { error = "Unable to find user"});
+            return BadRequest(new { error = "Unable to find user" });
         }
 
 

@@ -10,6 +10,7 @@ namespace ApiCatalogo.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class ProdutosController : ControllerBase
 {
     private readonly IUnitOfWork _uof;

@@ -9,12 +9,12 @@ using ApiCatalogo.Models;
 using ApiCatalogo.Repositories;
 using ApiCatalogo.Services;
 using APICatalogo.RateLimitOptions;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,10 +47,8 @@ builder.Services.AddCors(options =>
 );
 
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-// Configura OpenAPI com suporte à autenticação JWT
-builder.Services.AddOpenApi();
-
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 .AddEntityFrameworkStores<AppDbContext>()
@@ -64,7 +62,6 @@ options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
 
 //// JWT
 ///////
-
 var secretKey = builder.Configuration["JWT:SecretKey"]
     ?? throw new ArgumentException("Invalid secret key!!");
 
@@ -145,6 +142,22 @@ builder.Services.AddRateLimiter(options =>
 });
 
 
+// versionamento de API
+builder.Services.AddApiVersioning(options =>
+{
+    options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.ApiVersionReader = ApiVersionReader.Combine (
+        new QueryStringApiVersionReader("api-version")
+    );
+}).AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
+
+////
 
 builder.Services.AddScoped<ApiLoggingFilter>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
@@ -164,8 +177,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     app.ConfigureExceptionHandler();
 }
