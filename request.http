@@ -59,3 +59,8 @@ content-type: application/json
     "dataCadastro": "2024-12-18T23:10:48",
     "categoriaId": 1
   }
+
+
+###
+POST http://localhost:7072/api/teste?api-version=4 HTTP/1.1
+Content-Type: application/json
