@@ -12,7 +12,7 @@ namespace ApiCatalogo.Controllers
     [ApiController]
     [Route("[controller]")]
     [EnableRateLimiting("fixedwindow")]
-    [ApiExplorerSettings(IgnoreApi = true)]
+    // [ApiExplorerSettings(IgnoreApi = true)]
     public class CategoriasController : ControllerBase
     {
         private readonly IUnitOfWork _uof;
