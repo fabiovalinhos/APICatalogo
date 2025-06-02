@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
@@ -73,6 +74,9 @@ builder.Services.AddSwaggerGen(
         }
     });
 
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFile));
+
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Name = "Authorization",
@@ -82,6 +86,7 @@ builder.Services.AddSwaggerGen(
         In = ParameterLocation.Header,
         Description = "Bearer JWT ",
     });
+
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -233,7 +238,7 @@ if (app.Environment.IsDevelopment())
     // app.UseSwaggerUI();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", 
+        options.SwaggerEndpoint("/swagger/v1/swagger.json",
         "APICatalogo");
     });
 

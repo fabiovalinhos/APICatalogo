@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace ApiCatalogo.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [EnableRateLimiting("fixedwindow")]
     // [ApiExplorerSettings(IgnoreApi = true)]
     public class CategoriasController : ControllerBase
@@ -27,6 +27,10 @@ namespace ApiCatalogo.Controllers
         // No controlador não tenho mais um try catch pois eu tenho um filtro global para pegar
         // Exceptions (ApiExceptionFilter)
 
+        /// <summary>
+        /// Obtenho uma lista de objetos Categoria
+        /// </summary>
+        /// <returns>Uma lista de objetos Categoria</returns>
         [HttpGet]
         [ServiceFilter(typeof(ApiLoggingFilter))]
         // [Authorize]
@@ -43,6 +47,12 @@ namespace ApiCatalogo.Controllers
             return Ok(categorias.ParaDTOListaMapper());
         }
 
+
+        /// <summary>
+        /// Obtém uma categoria pelo ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Objeto Categoria</returns>
         [HttpGet("{id:int}", Name = "ObterCategoria")]
         public async Task<ActionResult<CategoriaDTO>> Get(int id)
         {
@@ -107,6 +117,22 @@ namespace ApiCatalogo.Controllers
             return Ok(categoriasDto);
         }
 
+        /// <summary>
+        /// Inclui uma nova categoria
+        /// </summary>
+        /// <remarks>
+        /// Exemplo de request
+        /// 
+        /// POST /api/categorias
+        /// {
+        /// "CategoriaId": 1,
+        ///     "nome": "Categoria Teste",
+        ///     "imageUrl": "https://example.com/image.jpg"
+        /// }
+        /// </remarks>
+        /// <param name="categoriaDTO">Objeto Categoria</param>
+        /// <returns>O objeto Categoria incluído</returns>
+        /// <remarks>Retorna o objeto Categoria incluído</remarks>
         [HttpPost]
         public async Task<ActionResult<CategoriaDTO>> Post(CategoriaDTO categoriaDTO)
         {

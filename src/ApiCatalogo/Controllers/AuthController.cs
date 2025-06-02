@@ -121,7 +121,12 @@ namespace ApiCatalogo.Controllers
             return BadRequest(new { error = "Unable to find user" });
         }
 
-
+        /// <summary>
+        /// Verifica as credenciais do usuário e gera um token JWT
+        /// </summary>
+        /// <param name="model">Um objeto do tipo LoginModelDTO</param>
+        /// <returns>Status 200 e o token</returns>
+        /// <remarks> Retorna o status 200 e o token</remarks>
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModelDTO model)
@@ -171,7 +176,12 @@ namespace ApiCatalogo.Controllers
             return Unauthorized();
         }
 
-
+        /// <summary>
+        /// Registra um novo usuário no sistema
+        /// </summary>
+        /// <param name="model">Um objeto RegisterModeDTO</param>
+        /// <returns>Status 200</returns>
+        /// <remarks>retorna o Status 200</remarks>
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModelDTO model)
