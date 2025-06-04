@@ -12,6 +12,7 @@ namespace ApiCatalogo.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [EnableRateLimiting("fixedwindow")]
+    [Produces("application/json")] // Todos os métodos deste controller produzem JSON
     // [ApiExplorerSettings(IgnoreApi = true)]
     public class CategoriasController : ControllerBase
     {
@@ -54,6 +55,9 @@ namespace ApiCatalogo.Controllers
         /// <param name="id"></param>
         /// <returns>Objeto Categoria</returns>
         [HttpGet("{id:int}", Name = "ObterCategoria")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoriaDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<CategoriaDTO>> Get(int id)
         {
             // teste de excessões
@@ -134,6 +138,9 @@ namespace ApiCatalogo.Controllers
         /// <returns>O objeto Categoria incluído</returns>
         /// <remarks>Retorna o objeto Categoria incluído</remarks>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CategoriaDTO))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<CategoriaDTO>> Post(CategoriaDTO categoriaDTO)
         {
             if (categoriaDTO is null)

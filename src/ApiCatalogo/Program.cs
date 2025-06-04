@@ -74,6 +74,7 @@ builder.Services.AddSwaggerGen(
         }
     });
 
+    //Gerar commentários XML na UI do Swagger
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFile));
 

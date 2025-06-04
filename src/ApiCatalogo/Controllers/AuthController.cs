@@ -11,6 +11,7 @@ namespace ApiCatalogo.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Produces("application/json")] // Todos os métodos deste controller produzem JSON
     // [ApiExplorerSettings(IgnoreApi = true)]
     public class AuthController : ControllerBase
     {

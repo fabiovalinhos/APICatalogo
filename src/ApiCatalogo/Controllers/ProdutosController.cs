@@ -10,6 +10,7 @@ namespace ApiCatalogo.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Produces("application/json")] // Todos os métodos deste controller produzem JSON
 // [ApiExplorerSettings(IgnoreApi = true)]
 public class ProdutosController : ControllerBase
 {
@@ -148,10 +149,10 @@ public class ProdutosController : ControllerBase
         if (!ModelState.IsValid || TryValidateModel(produtoUpdateRequest))
             return BadRequest(ModelState);
 
-        /// Tenho que mandar produto, senão nao tenho tracking
+        //// Tenho que mandar produto, senão nao tenho tracking
         produto.Estoque = produtoUpdateRequest.Estoque;
         produto.DataCadastro = produtoUpdateRequest.DataCadastro;
-        ///
+        ////
 
         var produtoFinal = _uof.ProdutoRepository.Update(produto);
         await _uof.CommitAsync();
