@@ -12,6 +12,7 @@ namespace ApiCatalogo.Controllers;
 [Route("[controller]")]
 [Produces("application/json")] // Todos os métodos deste controller produzem JSON
 // [ApiExplorerSettings(IgnoreApi = true)]
+[ApiConventionType(typeof(DefaultApiConventions))]//Conversao padrões para todos os métodos
 public class ProdutosController : ControllerBase
 {
     private readonly IUnitOfWork _uof;

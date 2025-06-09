@@ -158,6 +158,7 @@ namespace ApiCatalogo.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult<CategoriaDTO>> Put(int id, CategoriaDTO categoriaDTO)
         {
             if (id != categoriaDTO.CategoriaId)
