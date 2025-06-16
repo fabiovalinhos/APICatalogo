@@ -4,7 +4,7 @@ namespace ApiCatalogo.DTOs
 {
     public static class CategoriaMapper
     {
-        public static CategoriaDTO? ParaDTOMapper(this Categoria entidade)
+        public static CategoriaDTO? MapperParaCategoriaDTO(this Categoria entidade)
         {
             if (entidade is null) return null;
 
@@ -16,7 +16,7 @@ namespace ApiCatalogo.DTOs
             };
         }
 
-        public static Categoria? ParaCategoriaMapper(this CategoriaDTO entidade)
+        public static Categoria? MapperParaCategoria(this CategoriaDTO entidade)
         {
             if (entidade is null) return null;
 
@@ -28,7 +28,7 @@ namespace ApiCatalogo.DTOs
             };
         }
 
-        public static IEnumerable<CategoriaDTO> ParaDTOListaMapper(this IEnumerable<Categoria> entidade)
+        public static IEnumerable<CategoriaDTO> MapperParaListaCategoriaDTO(this IEnumerable<Categoria> entidade)
         {
             if (entidade is null || !entidade.Any())
             {

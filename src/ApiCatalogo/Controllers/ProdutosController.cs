@@ -30,7 +30,7 @@ public class ProdutosController : ControllerBase
         if (produtos is null)
             return NotFound();
 
-        return Ok(produtos.ParaProdutoListaMapper());
+        return Ok(produtos.MapperParaListaProdutoDTO());
     }
 
     [HttpGet("pagination")]
@@ -65,7 +65,7 @@ public class ProdutosController : ControllerBase
 
         Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-        var produtosDto = produtos.ParaProdutoListaMapper();
+        var produtosDto = produtos.MapperParaListaProdutoDTO();
 
         return Ok(produtosDto);
     }
@@ -86,7 +86,7 @@ public class ProdutosController : ControllerBase
             return NotFound("Produtos não encontrados");
         }
 
-        return Ok(produtos.ParaProdutoListaMapper());
+        return Ok(produtos.MapperParaListaProdutoDTO());
     }
 
     /// <summary>
@@ -104,7 +104,7 @@ public class ProdutosController : ControllerBase
             return NotFound("Produto não encontrado");
         }
 
-        return Ok(produto.ParaProdutoDTOMapper());
+        return Ok(produto.MapperParaProdutoDTO());
     }
 
     [HttpPost]
@@ -118,10 +118,10 @@ public class ProdutosController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var novoProduto = _uof.ProdutoRepository.Create(produtoDTO.ParaEntidadeProdutoMapper());
+        var novoProduto = _uof.ProdutoRepository.Create(produtoDTO.MapperParaEntidadeProduto());
         await _uof.CommitAsync();
 
-        var novoProdutoDTO = novoProduto.ParaProdutoDTOMapper();
+        var novoProdutoDTO = novoProduto.MapperParaProdutoDTO();
 
         return new CreatedAtRouteResult(
             "ObterProduto", new { id = novoProdutoDTO.ProdutoId }, novoProdutoDTO);
@@ -143,7 +143,7 @@ public class ProdutosController : ControllerBase
         //  TODO: acho que está certo esta volta toda
         // preciso pensar melhor
         var produtoUpdateRequest
-            = produto.DeProdutoParaProdutoDTOUpdateRequestMapper();
+            = produto.MapperDeProdutoParaProdutoDTOUpdateRequest();
 
         patchProdutoDTO.ApplyTo(produtoUpdateRequest, ModelState);
 
@@ -158,7 +158,7 @@ public class ProdutosController : ControllerBase
         var produtoFinal = _uof.ProdutoRepository.Update(produto);
         await _uof.CommitAsync();
 
-        return Ok(produtoFinal.DeProdutoParaProdutoDTOUpdateResponseMapper());
+        return Ok(produtoFinal.MapperDeProdutoParaProdutoDTOUpdateResponse());
     }
 
 
@@ -169,10 +169,10 @@ public class ProdutosController : ControllerBase
             return BadRequest("Id com valores diferentes ...");
 
 
-        var produtoAtualizado = _uof.ProdutoRepository.Update(produtoDTO.ParaEntidadeProdutoMapper());
+        var produtoAtualizado = _uof.ProdutoRepository.Update(produtoDTO.MapperParaEntidadeProduto());
         await _uof.CommitAsync();
 
-        return Ok(produtoAtualizado.ParaProdutoDTOMapper());
+        return Ok(produtoAtualizado.MapperParaProdutoDTO());
     }
 
 
@@ -187,6 +187,6 @@ public class ProdutosController : ControllerBase
         var produtoDeletado = _uof.ProdutoRepository.Delete(produto);
         await _uof.CommitAsync();
 
-        return Ok(produtoDeletado.ParaProdutoDTOMapper());
+        return Ok(produtoDeletado.MapperParaProdutoDTO());
     }
 }
