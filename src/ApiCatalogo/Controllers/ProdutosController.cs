@@ -79,14 +79,24 @@ public class ProdutosController : ControllerBase
     [Authorize(Policy = "UserOnly")]
     public async Task<ActionResult<IEnumerable<ProdutoDTO>>> Get()
     {
-        var produtos = await _uof.ProdutoRepository.GetAllAsync(null);
-
-        if (produtos is null)
+        try
         {
-            return NotFound("Produtos não encontrados");
+            // throw new Exception(); serve para testar o tratamento de erro
+
+            var produtos = await _uof.ProdutoRepository.GetAllAsync(null);
+
+            if (produtos is null)
+            {
+                return NotFound("Produtos não encontrados");
+            }
+
+            return Ok(produtos.MapperParaListaProdutoDTO());
+        }
+        catch
+        {
+            return BadRequest();
         }
 
-        return Ok(produtos.MapperParaListaProdutoDTO());
     }
 
     /// <summary>
@@ -95,8 +105,12 @@ public class ProdutosController : ControllerBase
     /// <param name="id">Código do produto</param>
     /// <returns>Um objeto produto</returns>
     [HttpGet("{id:int:min(1)}", Name = "ObterProduto")]
-    public async Task<ActionResult<ProdutoDTO>> Get(int id)
+    public async Task<ActionResult<ProdutoDTO>> Get(int? id)
     {
+        if (id is null || id <= 0)
+            return BadRequest("ID inválido");
+
+
         var produto = await _uof.ProdutoRepository.GetAsync(p => p.ProdutoId == id);
 
         if (produto is null)

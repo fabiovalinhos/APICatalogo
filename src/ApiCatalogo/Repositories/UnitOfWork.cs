@@ -11,6 +11,13 @@ namespace ApiCatalogo.Repositories
         public AppDbContext _context;
 
 
+        public UnitOfWork(AppDbContext context)
+        {
+            _context = context;
+        }
+
+
+
         // Técnica LazyLoading. Evita a criação de objeto desnecessário
         public IProdutoRepository ProdutoRepository
         {
@@ -29,15 +36,6 @@ namespace ApiCatalogo.Repositories
         }
 
         //////
-
-        public UnitOfWork(AppDbContext context)
-        {
-            _context = context;
-        }
-
-
-
-
 
 
         public async Task CommitAsync()
