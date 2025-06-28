@@ -44,7 +44,7 @@ namespace ApiCatalogoxUnitTests.UnitTests
         //     // Seed inicial para garantir que o produto com ID = 2 exista no teste
         //     if (!context.Produtos.Any())
         //     {
-        //         //Aqui eu devo colocar o Dominio correto. Preguiça de escrever o Dominio no exemplo
+        //         //Aqui eu deveria colocar o Dominio(model) correto do Produto. Preguiça de escrever o Dominio no exemplo
         //         context.Produtos.AddRange(
         //             new Produto { ProdutoId = 1, Nome = "Produto 1", Preco = 10 },
         //             new Produto { ProdutoId = 2, Nome = "Produto 2", Preco = 20 }
