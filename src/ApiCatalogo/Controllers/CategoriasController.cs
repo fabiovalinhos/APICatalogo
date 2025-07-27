@@ -5,6 +5,7 @@ using ApiCatalogo.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 
 namespace ApiCatalogo.Controllers
@@ -19,10 +20,16 @@ namespace ApiCatalogo.Controllers
         private readonly IUnitOfWork _uof;
         private readonly ILogger<CategoriasController> _logger;
 
-        public CategoriasController(ILogger<CategoriasController> logger, IUnitOfWork uof)
+        private readonly IMemoryCache _cache;
+
+        private const string CacheCategoriasKey = "CacheCategorias";
+
+        public CategoriasController(ILogger<CategoriasController> logger, IUnitOfWork uof,
+            IMemoryCache cache)
         {
             _logger = logger;
             _uof = uof;
+            _cache = cache;
         }
 
         // No controlador não tenho mais um try catch pois eu tenho um filtro global para pegar
@@ -41,14 +48,29 @@ namespace ApiCatalogo.Controllers
         [ProducesDefaultResponseType]
         public async Task<ActionResult<IEnumerable<CategoriaDTO>>> Get()
         {
-            var categorias = await _uof.CategoriaRepository.GetAllAsync(null);
-
-            if (categorias is null)
+            if (_cache.TryGetValue(CacheCategoriasKey, out IEnumerable<CategoriaDTO> categoriasDTO))
             {
-                return NotFound("Categorias nao encontradas ... ");
+                return Ok(categoriasDTO);
             }
 
-            return Ok(categorias.MapperParaListaCategoriaDTO());
+            var categorias = await _uof.CategoriaRepository.GetAllAsync(null);
+            if (categorias is null || !categorias.Any())
+            {
+                return NotFound("Categorias não encontradas...");
+            }
+
+            categoriasDTO = categorias.MapperParaListaCategoriaDTO();
+
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30),
+                SlidingExpiration = TimeSpan.FromSeconds(15),
+                Priority = CacheItemPriority.High
+            };
+
+            _cache.Set(CacheCategoriasKey, categoriasDTO, cacheEntryOptions);
+
+            return Ok(categoriasDTO);
         }
 
 
