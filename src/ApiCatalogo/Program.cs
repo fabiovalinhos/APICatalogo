@@ -230,6 +230,9 @@ builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggingProviderCo
     LogLevel = LogLevel.Information
 }));
 
+// cache
+builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
