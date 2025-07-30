@@ -29,6 +29,7 @@ namespace ApiCatalogo.Repositories
 
         public async Task<T?> GetAsync(Expression<Func<T, bool>> predicate)
         {
+            Thread.Sleep(4000); // Simulando uma operação demorada
             return await _context.Set<T>().FirstOrDefaultAsync(predicate);
         }
 

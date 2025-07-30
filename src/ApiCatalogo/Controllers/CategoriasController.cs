@@ -91,6 +91,12 @@ namespace ApiCatalogo.Controllers
             // string [] teste = null;
             // if (teste.Length >0 ){}
 
+            var CacheCategoriaKey = $"CacheCategoria_{id}";
+
+            if (_cache.TryGetValue(CacheCategoriaKey, out CategoriaDTO? categoriaDTO))
+            {
+                return Ok(categoriaDTO);
+            }
             _logger.LogInformation($"========= GET categorias/id = {id} ==========");
 
             var categoria = await _uof.CategoriaRepository.GetAsync(c => c.CategoriaId == id);
@@ -100,10 +106,20 @@ namespace ApiCatalogo.Controllers
                 _logger.LogWarning($"Categoria com id = {id} não foi encontrado");
                 return NotFound($"Categoria id = {id} não encontrada...");
             }
+            else
+            {
+                categoriaDTO = categoria.MapperParaCategoriaDTO();
 
-            var categoriaDTO = categoria.MapperParaCategoriaDTO();
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30),
+                    SlidingExpiration = TimeSpan.FromSeconds(15),
+                    Priority = CacheItemPriority.High
+                };
 
-            return Ok(categoriaDTO);
+                _cache.Set(CacheCategoriaKey, categoriaDTO, cacheEntryOptions);
+                return Ok(categoriaDTO);
+            }
         }
 
 
