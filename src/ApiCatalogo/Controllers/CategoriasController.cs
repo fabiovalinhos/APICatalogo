@@ -192,7 +192,21 @@ namespace ApiCatalogo.Controllers
             var categoriaCriada = _uof.CategoriaRepository.Create(categoria);
             await _uof.CommitAsync();
 
+            // Limpa o cache de categorias, pois uma nova categoria foi criada
+            _cache.Remove(CacheCategoriasKey);
+
+            var cacheKey = $"CacheCategoria_{categoriaCriada.CategoriaId}";
+
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30),
+                SlidingExpiration = TimeSpan.FromSeconds(15),
+                Priority = CacheItemPriority.High
+            };
+
             var novaCategoriaDTO = categoriaCriada.MapperParaCategoriaDTO();
+
+            _cache.Set(cacheKey, novaCategoriaDTO, cacheEntryOptions);
 
             return new CreatedAtRouteResult("ObterCategoria",
             new { id = novaCategoriaDTO.CategoriaId }, novaCategoriaDTO);
