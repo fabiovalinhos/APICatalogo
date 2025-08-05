@@ -229,6 +229,18 @@ namespace ApiCatalogo.Controllers
 
             var novaCategoriaDTO = categoriaAtualizada.MapperParaCategoriaDTO();
 
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30),
+                SlidingExpiration = TimeSpan.FromSeconds(15),
+                Priority = CacheItemPriority.High
+            };
+
+
+            _cache.Set($"CacheCategoria_{novaCategoriaDTO.CategoriaId}", novaCategoriaDTO, cacheEntryOptions);
+
+            _cache.Remove(CacheCategoriasKey);
+
             return Ok(novaCategoriaDTO);
         }
 
