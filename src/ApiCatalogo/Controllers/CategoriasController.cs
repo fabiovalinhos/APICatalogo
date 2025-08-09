@@ -258,6 +258,11 @@ namespace ApiCatalogo.Controllers
             await _uof.CommitAsync();
 
             var categDTO = categoriaExcluida.MapperParaCategoriaDTO();
+
+            _cache.Remove($"CacheCategoria_{categDTO.CategoriaId}");
+            _cache.Remove(CacheCategoriasKey);  
+            _logger.LogInformation($"Categoria id = {id} excluída com sucesso ...");
+
             return Ok(categDTO);
         }
     }
