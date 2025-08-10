@@ -61,14 +61,7 @@ namespace ApiCatalogo.Controllers
 
             categoriasDTO = categorias.MapperParaListaCategoriaDTO();
 
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30),
-                SlidingExpiration = TimeSpan.FromSeconds(15),
-                Priority = CacheItemPriority.High
-            };
-
-            _cache.Set(CacheCategoriasKey, categoriasDTO, cacheEntryOptions);
+            SetCache(CacheCategoriasKey, categoriasDTO);
 
             return Ok(categoriasDTO);
         }
@@ -91,12 +84,13 @@ namespace ApiCatalogo.Controllers
             // string [] teste = null;
             // if (teste.Length >0 ){}
 
-            var CacheCategoriaKey = $"CacheCategoria_{id}";
+            var cacheKey = GetCategoriaCacheKey(id);
 
-            if (_cache.TryGetValue(CacheCategoriaKey, out CategoriaDTO? categoriaDTO))
+            if (_cache.TryGetValue(cacheKey, out CategoriaDTO? categoriaDTO))
             {
                 return Ok(categoriaDTO);
             }
+
             _logger.LogInformation($"========= GET categorias/id = {id} ==========");
 
             var categoria = await _uof.CategoriaRepository.GetAsync(c => c.CategoriaId == id);
@@ -106,20 +100,11 @@ namespace ApiCatalogo.Controllers
                 _logger.LogWarning($"Categoria com id = {id} não foi encontrado");
                 return NotFound($"Categoria id = {id} não encontrada...");
             }
-            else
-            {
-                categoriaDTO = categoria.MapperParaCategoriaDTO();
 
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30),
-                    SlidingExpiration = TimeSpan.FromSeconds(15),
-                    Priority = CacheItemPriority.High
-                };
+            SetCache(cacheKey, categoria.MapperParaCategoriaDTO());
+            _logger.LogInformation($"Categoria com id = {id} encontrada com sucesso ...");
 
-                _cache.Set(CacheCategoriaKey, categoriaDTO, cacheEntryOptions);
-                return Ok(categoriaDTO);
-            }
+            return Ok(categoria.MapperParaCategoriaDTO());
         }
 
 
@@ -192,21 +177,9 @@ namespace ApiCatalogo.Controllers
             var categoriaCriada = _uof.CategoriaRepository.Create(categoria);
             await _uof.CommitAsync();
 
-            // Limpa o cache de categorias, pois uma nova categoria foi criada
-            _cache.Remove(CacheCategoriasKey);
-
-            var cacheKey = $"CacheCategoria_{categoriaCriada.CategoriaId}";
-
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30),
-                SlidingExpiration = TimeSpan.FromSeconds(15),
-                Priority = CacheItemPriority.High
-            };
-
             var novaCategoriaDTO = categoriaCriada.MapperParaCategoriaDTO();
 
-            _cache.Set(cacheKey, novaCategoriaDTO, cacheEntryOptions);
+            InvalidateCacheAfterChange(novaCategoriaDTO.CategoriaId, categoriaDTO);
 
             return new CreatedAtRouteResult("ObterCategoria",
             new { id = novaCategoriaDTO.CategoriaId }, novaCategoriaDTO);
@@ -229,17 +202,7 @@ namespace ApiCatalogo.Controllers
 
             var novaCategoriaDTO = categoriaAtualizada.MapperParaCategoriaDTO();
 
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30),
-                SlidingExpiration = TimeSpan.FromSeconds(15),
-                Priority = CacheItemPriority.High
-            };
-
-
-            _cache.Set($"CacheCategoria_{novaCategoriaDTO.CategoriaId}", novaCategoriaDTO, cacheEntryOptions);
-
-            _cache.Remove(CacheCategoriasKey);
+            InvalidateCacheAfterChange(id, novaCategoriaDTO);
 
             return Ok(novaCategoriaDTO);
         }
@@ -259,11 +222,36 @@ namespace ApiCatalogo.Controllers
 
             var categDTO = categoriaExcluida.MapperParaCategoriaDTO();
 
-            _cache.Remove($"CacheCategoria_{categDTO.CategoriaId}");
-            _cache.Remove(CacheCategoriasKey);  
+            InvalidateCacheAfterChange(id);
+
             _logger.LogInformation($"Categoria id = {id} excluída com sucesso ...");
 
             return Ok(categDTO);
+        }
+
+        private string GetCategoriaCacheKey(int id) => $"CacheCategoria_{id}";
+
+        private void SetCache<T>(string key, T value)
+        {
+            var cacheOptions = new MemoryCacheEntryOptions()
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30),
+                SlidingExpiration = TimeSpan.FromSeconds(15),
+                Priority = CacheItemPriority.High
+            };
+
+            _cache.Set(key, value, cacheOptions);
+        }
+
+        private void InvalidateCacheAfterChange(int id, CategoriaDTO? categoriaDTO = null)
+        {
+            _cache.Remove(CacheCategoriasKey);
+            _cache.Remove(GetCategoriaCacheKey(id));
+
+            if (categoriaDTO is not null)
+            {
+                SetCache(GetCategoriaCacheKey(id), categoriaDTO);
+            }
         }
     }
 }
