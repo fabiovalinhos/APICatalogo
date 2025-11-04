@@ -24,22 +24,81 @@ namespace CatalogoMvc.Services
 
         public async Task<bool> AtualizarCategoria(int id, CategoriaViewModel categoria)
         {
-            throw new NotImplementedException();
+            var client = _clientFactory.CreateClient("CategoriasApi");
+
+            using (var response = await client.PutAsJsonAsync(apiEndpoint + id, categoria))
+            {
+                if(response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         public async Task<CategoriaViewModel> CriarCategoria(CategoriaViewModel categoria)
         {
-            throw new NotImplementedException();
+         var client = _clientFactory.CreateClient("CategoriasApi");
+
+            StringContent categoriaJson = new StringContent(
+                JsonSerializer.Serialize(categoria),
+                System.Text.Encoding.UTF8,
+                "application/json");
+
+            using (var response = await client.PostAsync(apiEndpoint, categoriaJson))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    categoriaVM = JsonSerializer.Deserialize<CategoriaViewModel>(apiResponse, _options);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            return categoriaVM;   
         }
 
         public async Task<bool> DeletarCategoria(int id)
         {
-            throw new NotImplementedException();
+            var client = _clientFactory.CreateClient("CategoriasApi");
+
+            using (var response = await client.DeleteAsync(apiEndpoint + id))
+            {
+                if(response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         public async Task<CategoriaViewModel> GetCategoriaPorId(int id)
         {
-            throw new NotImplementedException();
+            var client = _clientFactory.CreateClient("CategoriasApi");
+
+            using (var response = await client.GetAsync(apiEndpoint + id))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    categoriaVM = JsonSerializer.Deserialize<CategoriaViewModel>(apiResponse, _options);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            return categoriaVM;
         }
 
         public async Task<IEnumerable<CategoriaViewModel>> GetCategorias()
@@ -59,8 +118,7 @@ namespace CatalogoMvc.Services
                 }
             }
 
-            return categoriasVM; 3:41
-
+            return categoriasVM;
         }
     }
 }
