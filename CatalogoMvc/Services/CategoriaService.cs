@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.IO;
 using CatalogoMvc.Models;
 
 namespace CatalogoMvc.Services
@@ -43,7 +44,23 @@ namespace CatalogoMvc.Services
 
         public async Task<IEnumerable<CategoriaViewModel>> GetCategorias()
         {
-            throw new NotImplementedException();
+            var client = _clientFactory.CreateClient("CategoriasApi");
+
+            using (var response = await client.GetAsync(apiEndpoint))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    categoriasVM = JsonSerializer.Deserialize<IEnumerable<CategoriaViewModel>>(apiResponse, _options);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            return categoriasVM; 3:41
+
         }
     }
 }
