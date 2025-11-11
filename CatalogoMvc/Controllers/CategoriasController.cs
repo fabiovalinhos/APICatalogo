@@ -35,7 +35,7 @@ namespace CatalogoMvc.Controllers
         {
             return View();
         }
-        
+
 
         [HttpPost]
         public async Task<ActionResult<CategoriaViewModel>> CriarNovaCategoria(CategoriaViewModel categoria)
@@ -49,6 +49,32 @@ namespace CatalogoMvc.Controllers
             }
 
             ViewBag.Error = "Erro ao criar a categoria. Tente novamente.";
+            return View(categoria);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AtualizarCategoria(int id)
+        {
+            CategoriaViewModel? categoria = await _categoriaService.GetCategoriaPorId(id);
+
+            if (categoria is null)
+                return View("Error");
+
+            return View(categoria);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AtualizarCategoria(int id, CategoriaViewModel categoria)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _categoriaService.AtualizarCategoria(id, categoria);
+
+                if (result)
+                    return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.Error = "Erro ao atualizar a categoria. Tente novamente.";
             return View(categoria);
         }
     }
