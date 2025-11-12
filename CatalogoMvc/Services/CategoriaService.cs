@@ -64,7 +64,7 @@ namespace CatalogoMvc.Services
             return categoriaVM;   
         }
 
-        public async Task<bool> DeletarCategoria(int id)
+        public async Task<bool> DeletaCategoria(int id)
         {
             var client = _clientFactory.CreateClient("CategoriasApi");
 

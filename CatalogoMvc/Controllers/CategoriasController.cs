@@ -64,7 +64,7 @@ namespace CatalogoMvc.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AtualizarCategoria(int id, CategoriaViewModel categoria)
+        public async Task<IActionResult> AtualizarCategoria(int id, CategoriaViewModel categoria)
         {
             if (ModelState.IsValid)
             {
@@ -76,6 +76,28 @@ namespace CatalogoMvc.Controllers
 
             ViewBag.Error = "Erro ao atualizar a categoria. Tente novamente.";
             return View(categoria);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeletarCategoria(int id)
+        {
+            CategoriaViewModel? categoria = await _categoriaService.GetCategoriaPorId(id);
+
+            if (categoria is null)
+                return View("Error");
+
+            return View(categoria);
+        }
+
+        [HttpPost, ActionName("DeletarCategoria")]
+        public async Task<IActionResult> DeletaConfirmado(int id)
+        {
+            var result = await _categoriaService.DeletaCategoria(id);
+
+            if (result)
+                return RedirectToAction(nameof(Index));
+
+            return View("Error");
         }
     }
 }

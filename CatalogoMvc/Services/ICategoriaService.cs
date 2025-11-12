@@ -8,6 +8,6 @@ namespace CatalogoMvc.Services
         Task<CategoriaViewModel> GetCategoriaPorId(int id);
         Task<CategoriaViewModel> CriarCategoria(CategoriaViewModel categoria);
         Task<bool> AtualizarCategoria(int id, CategoriaViewModel categoria);
-        Task<bool> DeletarCategoria(int id);
+        Task<bool> DeletaCategoria(int id);
     }
 }
